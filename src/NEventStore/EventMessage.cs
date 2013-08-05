@@ -7,7 +7,9 @@
     /// <summary>
     ///     Represents a single element in a stream of events.
     /// </summary>
+#if !PocketPC
     [DataContract]
+#endif
     [Serializable]
     public class EventMessage
     {
@@ -22,13 +24,17 @@
         /// <summary>
         ///     Gets the metadata which provides additional, unstructured information about this message.
         /// </summary>
+#if !PocketPC
         [DataMember]
+#endif
         public Dictionary<string, object> Headers { get; private set; }
 
         /// <summary>
         ///     Gets or sets the actual event message body.
         /// </summary>
+#if !PocketPC
         [DataMember]
+#endif
         public object Body { get; set; }
     }
 }

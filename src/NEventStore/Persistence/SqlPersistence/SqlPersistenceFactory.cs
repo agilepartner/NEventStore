@@ -14,6 +14,7 @@ namespace NEventStore.Persistence.SqlPersistence
         private readonly TransactionScopeOption _scopeOption;
         private readonly ISerialize _serializer;
 
+#if !PocketPC
         public SqlPersistenceFactory(string connectionName, ISerialize serializer)
             : this(connectionName, serializer, null)
         {}
@@ -25,6 +26,7 @@ namespace NEventStore.Persistence.SqlPersistence
             _dialect = dialect ?? ResolveDialect(new ConfigurationConnectionFactory(connectionName).Settings);
         }
 
+#endif
         public SqlPersistenceFactory(IConnectionFactory factory, ISerialize serializer, ISqlDialect dialect)
             : this(factory, serializer, dialect, TransactionScopeOption.Suppress, DefaultPageSize)
         {}
@@ -77,6 +79,7 @@ namespace NEventStore.Persistence.SqlPersistence
                 ConnectionFactory, Dialect, Serializer, _scopeOption, PageSize);
         }
 
+#if !PocketPC
         protected static ISqlDialect ResolveDialect(ConnectionStringSettings settings)
         {
             string connectionString = settings.ConnectionString.ToUpperInvariant();
@@ -124,5 +127,6 @@ namespace NEventStore.Persistence.SqlPersistence
 
             return new MsSqlDialect();
         }
+#endif
     }
 }

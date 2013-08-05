@@ -145,7 +145,11 @@ namespace NEventStore.Persistence.SqlPersistence.SqlDialects
 
         public virtual bool IsDuplicate(Exception exception)
         {
+#if PocketPC
+            string message = exception.Message.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+#else
             string message = exception.Message.ToUpperInvariant();
+#endif
             return message.Contains("DUPLICATE") || message.Contains("UNIQUE") || message.Contains("CONSTRAINT");
         }
 

@@ -8,6 +8,7 @@ namespace NEventStore.Persistence.SqlPersistence
     using System.Globalization;
     using System.Linq;
     using NEventStore.Logging;
+    using System.Transactions;
 
     public class ConfigurationConnectionFactory : IConnectionFactory
     {

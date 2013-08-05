@@ -32,6 +32,7 @@ namespace NEventStore.Persistence.SqlPersistence
             : base(message, innerException)
         {}
 
+#if !PocketPC
         /// <summary>
         ///     Initializes a new instance of the UniqueKeyViolationException class.
         /// </summary>
@@ -39,6 +40,7 @@ namespace NEventStore.Persistence.SqlPersistence
         /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
         protected UniqueKeyViolationException(SerializationInfo info, StreamingContext context)
             : base(info, context)
-        {}
+        { } 
+#endif
     }
 }

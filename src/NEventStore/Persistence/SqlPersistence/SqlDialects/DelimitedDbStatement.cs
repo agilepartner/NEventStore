@@ -30,7 +30,7 @@ namespace NEventStore.Persistence.SqlPersistence.SqlDialects
                 return new string[] {};
             }
 
-            return delimited.Split(Delimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+            return delimited.Split(Delimiter.ToCharArray()).Where(x => !String.IsNullOrEmpty(x))
                             .AsEnumerable().Select(x => x + Delimiter)
                             .ToArray();
         }

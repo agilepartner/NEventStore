@@ -57,7 +57,11 @@ namespace NEventStore.Persistence.SqlPersistence.SqlDialects
         public override bool IsDuplicate(Exception exception)
         {
             // using reflection to avoid a direct dependency on SQL CE assemblies
+#if PocketPC
+            string message = exception.Message.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+#else
             string message = exception.Message.ToUpperInvariant();
+#endif
             return message.Contains("DUPLICATE") || message.Contains("UNIQUE");
         }
 
@@ -75,7 +79,7 @@ namespace NEventStore.Persistence.SqlPersistence.SqlDialects
                 IDbConnection connection,
                 IDbTransaction transaction)
                 : base(dialect, scope, connection, transaction)
-            {}
+            { }
 
             protected override void SetParameterValue(IDataParameter param, object value, DbType? type)
             {
@@ -87,7 +91,7 @@ namespace NEventStore.Persistence.SqlPersistence.SqlDialects
                 {
                     param.GetType().InvokeMember("SqlDbType",
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
-                        Type.DefaultBinder, param, new object[] {SqlDbType.Image});
+                        Type.DefaultBinder, param, new object[] { SqlDbType.Image });
                 }
             }
         }

@@ -6,7 +6,9 @@ namespace NEventStore
     /// <summary>
     ///     Represents a materialized view of a stream at specific revision.
     /// </summary>
+#if !PocketPC
     [DataContract]
+#endif
     [Serializable]
     public class Snapshot
     {
@@ -33,19 +35,25 @@ namespace NEventStore
         /// <summary>
         ///     Gets the value which uniquely identifies the stream to which the snapshot applies.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual Guid StreamId { get; private set; }
 
         /// <summary>
         ///     Gets the position at which the snapshot applies.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual int StreamRevision { get; private set; }
 
         /// <summary>
         ///     Gets the snapshot or materialized view of the stream at the revision indicated.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual object Payload { get; private set; }
     }
 }

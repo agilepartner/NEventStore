@@ -7,7 +7,9 @@ namespace NEventStore
     /// <summary>
     ///     Represents a series of events which have been fully committed as a single unit and which apply to the stream indicated.
     /// </summary>
+#if !PocketPC
     [DataContract]
+#endif
     [Serializable]
     public class Commit
     {
@@ -49,43 +51,57 @@ namespace NEventStore
         /// <summary>
         ///     Gets the value which uniquely identifies the stream to which the commit belongs.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual Guid StreamId { get; private set; }
 
         /// <summary>
         ///     Gets the value which indicates the revision of the most recent event in the stream to which this commit applies.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual int StreamRevision { get; private set; }
 
         /// <summary>
         ///     Gets the value which uniquely identifies the commit within the stream.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual Guid CommitId { get; private set; }
 
         /// <summary>
         ///     Gets the value which indicates the sequence (or position) in the stream to which this commit applies.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual int CommitSequence { get; private set; }
 
         /// <summary>
         ///     Gets the point in time at which the commit was persisted.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual DateTime CommitStamp { get; private set; }
 
         /// <summary>
         ///     Gets the metadata which provides additional, unstructured information about this commit.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual Dictionary<string, object> Headers { get; private set; }
 
         /// <summary>
         ///     Gets the collection of event messages to be committed as a single unit.
         /// </summary>
-        [DataMember]
+#if !PocketPC
+        [DataMember] 
+#endif
         public virtual List<EventMessage> Events { get; private set; }
 
         /// <summary>

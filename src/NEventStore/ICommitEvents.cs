@@ -2,7 +2,7 @@ namespace NEventStore
 {
     using System;
     using System.Collections.Generic;
-    using NEventStore.Persistence;
+    //using NEventStore.Persistence;
 
     /// <summary>
     ///     Indicates the ability to commit events and access events to and from a given stream.
