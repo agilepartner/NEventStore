@@ -46,6 +46,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="protobuf-net, Version=2.0.0.640, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\protobuf-net\lib\net35-cf\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=3be235df1c8d2ad3, processorArchitecture=MSIL" />
@@ -65,6 +69,7 @@
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Commit.cs" />
+    <Compile Include="CommitExtensions.cs" />
     <Compile Include="ConcurrencyException.cs" />
     <Compile Include="Conversion\EventUpconverterPipelineHook.cs">
       <SubType>Code</SubType>
@@ -76,6 +81,7 @@
     <Compile Include="Dispatcher\IScheduleDispatches.cs" />
     <Compile Include="Dispatcher\NullDispatcher.cs" />
     <Compile Include="Dispatcher\SynchronousDispatchScheduler.cs" />
+    <Compile Include="DispatchSchedulerPipelineHook.cs" />
     <Compile Include="DuplicateCommitException.cs" />
     <Compile Include="EventMessage.cs" />
     <Compile Include="ExtensionMethods.cs" />
@@ -85,7 +91,12 @@
     <Compile Include="ICommitEvents.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IEventStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImmutableCollection.cs" />
     <Compile Include="IPipelineHook.cs" />
+    <Compile Include="IStoreEvents.cs" />
     <Compile Include="Logging\ExtensionMethods.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\LogFactory.cs" />
@@ -93,6 +104,12 @@
     <Compile Include="Messages.Designer.cs">
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="NanoContainer.cs" />
+    <Compile Include="OptimisticEventStore.cs" />
+    <Compile Include="OptimisticEventStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OptimisticPipelineHook.cs" />
     <Compile Include="Persistence\InMemoryPersistence\InMemoryPersistenceEngine.cs" />
     <Compile Include="Persistence\InMemoryPersistence\InMemoryPersistenceFactory.cs" />
     <Compile Include="Persistence\IPersistenceFactory.cs" />
@@ -132,13 +149,23 @@
     <Compile Include="Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Serialization\ByteStreamDocumentSerializer.cs" />
+    <Compile Include="Serialization\DocumentObjectSerializer.cs" />
+    <Compile Include="Serialization\GzipSerializer.cs" />
+    <Compile Include="Serialization\IDocumentSerializer.cs" />
+    <Compile Include="Serialization\IndisposableStream.cs" />
     <Compile Include="Serialization\ISerialize.cs" />
     <Compile Include="Serialization\Messages.Designer.cs">
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Serialization\RijndaelSerializer.cs" />
     <Compile Include="Serialization\SerializationExtensions.cs" />
     <Compile Include="Snapshot.cs" />
+    <Compile Include="StreamNotFoundException.cs" />
     <Compile Include="SystemTime.cs" />
+    <Compile Include="Wireup.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\CustomDictionary.xml">

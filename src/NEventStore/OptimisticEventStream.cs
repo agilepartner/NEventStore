@@ -14,7 +14,11 @@ namespace NEventStore
         private readonly ICollection<EventMessage> _committed = new LinkedList<EventMessage>();
         private readonly IDictionary<string, object> _committedHeaders = new Dictionary<string, object>();
         private readonly ICollection<EventMessage> _events = new LinkedList<EventMessage>();
+#if PocketPC
+        private readonly ICollection<Guid> _identifiers = new List<Guid>();
+#else
         private readonly ICollection<Guid> _identifiers = new HashSet<Guid>();
+#endif        
         private readonly ICommitEvents _persistence;
         private readonly IDictionary<string, object> _uncommittedHeaders = new Dictionary<string, object>();
         private bool _disposed;

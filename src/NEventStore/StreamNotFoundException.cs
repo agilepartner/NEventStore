@@ -32,6 +32,7 @@ namespace NEventStore
             : base(message, innerException)
         {}
 
+#if !PocketPC
         /// <summary>
         ///     Initializes a new instance of the StreamNotFoundException class.
         /// </summary>
@@ -39,6 +40,7 @@ namespace NEventStore
         /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
         protected StreamNotFoundException(SerializationInfo info, StreamingContext context)
             : base(info, context)
-        {}
+        { } 
+#endif
     }
 }

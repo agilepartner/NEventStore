@@ -34,7 +34,7 @@ namespace NEventStore
 
             container.Register(TransactionScopeOption.Suppress);
             container.Register<IPersistStreams>(new InMemoryPersistenceEngine());
-            container.Register(BuildEventStore);
+            container.Register<IStoreEvents>(BuildEventStore);
 
             return new Wireup(container);
         }
