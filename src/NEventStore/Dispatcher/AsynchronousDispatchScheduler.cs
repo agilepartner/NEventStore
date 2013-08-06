@@ -1,5 +1,8 @@
 namespace NEventStore.Dispatcher
 {
+#if PocketPC
+    using System;
+#endif
     using System.Collections.Concurrent;
     using System.Threading.Tasks;
     using NEventStore.Logging;
@@ -19,7 +22,11 @@ namespace NEventStore.Dispatcher
 
         protected override void Start()
         {
-            _queue = new BlockingCollection<Commit>(new ConcurrentQueue<Commit>(), BoundedCapacity);
+#if PocketPC
+            _queue = new BlockingCollection<Commit>(new System.Collections.Generic.Queue<Commit>(), BoundedCapacity);
+#else
+            _queue = new BlockingCollection<Commit>(new ConcurrentQueue<Commit>(), BoundedCapacity); 
+#endif
             _worker = new Task(Working);
             _working = true;
             _worker.Start();
@@ -38,10 +45,17 @@ namespace NEventStore.Dispatcher
             while (_working)
             {
                 Commit commit;
-                if (_queue.TryTake(out commit, 100))
+#if PocketPC
+                if (_queue.TryTake(out commit))
                 {
                     base.ScheduleDispatch(commit);
                 }
+#else
+                if (_queue.TryTake(out commit, 100))
+                {
+                    base.ScheduleDispatch(commit);
+                } 
+#endif
             }
         }
 

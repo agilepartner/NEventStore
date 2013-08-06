@@ -53,10 +53,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=3be235df1c8d2ad3, processorArchitecture=MSIL" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -68,6 +66,8 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AsynchronousDispatchSchedulerWireup.cs" />
+    <Compile Include="AsynchronousDispatchSchedulerWireupExtensions.cs" />
     <Compile Include="Commit.cs" />
     <Compile Include="CommitExtensions.cs" />
     <Compile Include="ConcurrencyException.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="Conversion\IUpconvertEvents.cs" />
     <Compile Include="Conversion\MultipleConvertersFoundException.cs" />
     <Compile Include="Diagnostics\PerformanceCounterPersistenceEngine.cs" />
+    <Compile Include="Dispatcher\AsynchronousDispatchScheduler.cs" />
     <Compile Include="Dispatcher\DelegateMessageDispatcher.cs" />
     <Compile Include="Dispatcher\IDispatchCommits.cs" />
     <Compile Include="Dispatcher\IScheduleDispatches.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Persistence\SqlPersistence\CommitExtensions.cs" />
     <Compile Include="Persistence\SqlPersistence\ConnectionScope.cs" />
     <Compile Include="Persistence\SqlPersistence\ExtensionMethods.cs" />
+    <Compile Include="Persistence\SqlPersistence\SqlCeConnectionFactory.cs" />
     <Compile Include="Persistence\SqlPersistence\IConnectionFactory.cs" />
     <Compile Include="Persistence\SqlPersistence\IDbStatement.cs" />
     <Compile Include="Persistence\SqlPersistence\ISqlDialect.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Persistence\SqlPersistence\SnapshotExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Persistence\SqlPersistence\ConnectionStringSettings.cs" />
     <Compile Include="Persistence\SqlPersistence\SqlDialects\CommonDbStatement.cs" />
     <Compile Include="Persistence\SqlPersistence\SqlDialects\CommonSqlDialect.cs" />
     <Compile Include="Persistence\SqlPersistence\SqlDialects\CommonSqlStatements.Designer.cs">
