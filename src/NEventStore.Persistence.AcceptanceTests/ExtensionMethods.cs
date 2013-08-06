@@ -16,7 +16,12 @@ namespace NEventStore.Persistence.AcceptanceTests
             return new LinkedList<T>(collection);
         }
 
-        public static Commit CommitSingle(this IPersistStreams persistence, Guid? streamId = null)
+        public static Commit CommitSingle(this IPersistStreams persistence)
+        {
+            return CommitSingle(persistence, null);
+        }
+
+        public static Commit CommitSingle(this IPersistStreams persistence, Guid? streamId)
         {
             Commit commit = (streamId ?? Guid.NewGuid()).BuildAttempt();
             persistence.Commit(commit);
@@ -30,7 +35,12 @@ namespace NEventStore.Persistence.AcceptanceTests
             return commit;
         }
 
-        public static IEnumerable<Commit> CommitMany(this IPersistStreams persistence, int numberOfCommits, Guid? streamId = null)
+        public static IEnumerable<Commit> CommitMany(this IPersistStreams persistence, int numberOfCommits) 
+        {
+            return CommitMany(persistence, numberOfCommits, null);
+        }
+
+        public static IEnumerable<Commit> CommitMany(this IPersistStreams persistence, int numberOfCommits, Guid? streamId)
         {
             var commits = new List<Commit>();
             Commit attempt = null;

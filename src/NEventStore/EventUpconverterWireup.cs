@@ -24,22 +24,29 @@ namespace NEventStore
                     return new EventUpconverterPipelineHook(_registered);
                 }
 
+#if PocketPC
+                // TODO : Replace System.Reflection code by Mono.Cecil code to implement assembly scanning
+                return new EventUpconverterPipelineHook(new Dictionary<Type, Func<object, object>>());
+#else
                 if (!_assembliesToScan.Any())
                 {
                     _assembliesToScan.AddRange(GetAllAssemblies());
                 }
 
                 IDictionary<Type, Func<object, object>> converters = GetConverters(_assembliesToScan);
-                return new EventUpconverterPipelineHook(converters);
+                return new EventUpconverterPipelineHook(converters); 
+#endif
+
             });
         }
 
+#if !PocketPC
         private static IEnumerable<Assembly> GetAllAssemblies()
         {
             return Assembly.GetCallingAssembly()
                            .GetReferencedAssemblies()
                            .Select(Assembly.Load)
-                           .Concat(new[] {Assembly.GetCallingAssembly()});
+                           .Concat(new[] { Assembly.GetCallingAssembly() });
         }
 
         private static IDictionary<Type, Func<object, object>> GetConverters(IEnumerable<Assembly> toScan)
@@ -47,13 +54,13 @@ namespace NEventStore
             IEnumerable<KeyValuePair<Type, Func<object, object>>> c = from a in toScan
                                                                       from t in a.GetTypes()
                                                                       where !t.IsAbstract
-                                                                      let i = t.GetInterface(typeof (IUpconvertEvents<,>).FullName)
+                                                                      let i = t.GetInterface(typeof(IUpconvertEvents<,>).FullName)
                                                                       where i != null
                                                                       let sourceType = i.GetGenericArguments().First()
                                                                       let convertMethod = i.GetMethods(BindingFlags.Public | BindingFlags.Instance).First()
                                                                       let instance = Activator.CreateInstance(t)
                                                                       select new KeyValuePair<Type, Func<object, object>>(
-                                                                          sourceType, e => convertMethod.Invoke(instance, new[] {e}));
+                                                                          sourceType, e => convertMethod.Invoke(instance, new[] { e }));
             try
             {
                 return c.ToDictionary(x => x.Key, x => x.Value);
@@ -62,7 +69,8 @@ namespace NEventStore
             {
                 throw new MultipleConvertersFoundException(e.Message, e);
             }
-        }
+        } 
+#endif
 
         public virtual EventUpconverterWireup WithConvertersFrom(params Assembly[] assemblies)
         {

@@ -5,6 +5,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.CF", "NEventSto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.CF", "System.CF\System.CF.csproj", "{CDDC26DA-2CF4-4283-83FA-73C0761FE3DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Tests.35", "NEventStore.Tests\NEventStore.Tests.35.csproj", "{D218AF4B-A66C-41E8-A9DD-7C6A08920ADA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Persistence.AcceptanceTests.35", "NEventStore.Persistence.AcceptanceTests\NEventStore.Persistence.AcceptanceTests.35.csproj", "{E34AE6B0-FB9A-4A98-AC88-A30B4ED3E619}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".test", ".test", "{46F5A3E4-F188-4312-AB3D-683180A12BBC}"
+	ProjectSection(SolutionItems) = preProject
+		NEventStore.Persistence.AcceptanceTests\PersistenceTests.cs = NEventStore.Persistence.AcceptanceTests\PersistenceTests.cs
+		NEventStore.Persistence.AcceptanceTests\SerializationTests.cs = NEventStore.Persistence.AcceptanceTests\SerializationTests.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{26C55DEC-DB23-4D36-B29D-240BB6F90B7D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "serialization", "serialization", "{F8F7E66B-1170-47F8-9B0A-B54A53E9D910}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "utils", "utils", "{00446093-47F4-4078-AD0F-6FD9C3E0CAE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Serialization.Binary.Tests.35", "NEventStore.Serialization.Binary.Tests\NEventStore.Serialization.Binary.Tests.35.csproj", "{189CFF70-5615-40EE-8D5A-73515893685E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,8 +37,27 @@ Global
 		{CDDC26DA-2CF4-4283-83FA-73C0761FE3DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDC26DA-2CF4-4283-83FA-73C0761FE3DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDC26DA-2CF4-4283-83FA-73C0761FE3DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D218AF4B-A66C-41E8-A9DD-7C6A08920ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D218AF4B-A66C-41E8-A9DD-7C6A08920ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D218AF4B-A66C-41E8-A9DD-7C6A08920ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D218AF4B-A66C-41E8-A9DD-7C6A08920ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E34AE6B0-FB9A-4A98-AC88-A30B4ED3E619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E34AE6B0-FB9A-4A98-AC88-A30B4ED3E619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E34AE6B0-FB9A-4A98-AC88-A30B4ED3E619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E34AE6B0-FB9A-4A98-AC88-A30B4ED3E619}.Release|Any CPU.Build.0 = Release|Any CPU
+		{189CFF70-5615-40EE-8D5A-73515893685E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189CFF70-5615-40EE-8D5A-73515893685E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189CFF70-5615-40EE-8D5A-73515893685E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189CFF70-5615-40EE-8D5A-73515893685E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E34AE6B0-FB9A-4A98-AC88-A30B4ED3E619} = {46F5A3E4-F188-4312-AB3D-683180A12BBC}
+		{D218AF4B-A66C-41E8-A9DD-7C6A08920ADA} = {26C55DEC-DB23-4D36-B29D-240BB6F90B7D}
+		{B88F22AF-D8C7-41BA-AD09-D3AA449567DB} = {26C55DEC-DB23-4D36-B29D-240BB6F90B7D}
+		{189CFF70-5615-40EE-8D5A-73515893685E} = {F8F7E66B-1170-47F8-9B0A-B54A53E9D910}
+		{CDDC26DA-2CF4-4283-83FA-73C0761FE3DA} = {00446093-47F4-4078-AD0F-6FD9C3E0CAE8}
 	EndGlobalSection
 EndGlobal

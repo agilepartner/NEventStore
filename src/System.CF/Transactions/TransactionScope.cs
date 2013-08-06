@@ -7,11 +7,10 @@ namespace System.Transactions
 {
     public class TransactionScope : IDisposable
     {
-        // TODO : Implement decent TransactionScope
 
         public TransactionScope(TransactionScopeOption option)
         {
-            
+            // TODO : Implement decent TransactionScope
         }
 
         public void Dispose()

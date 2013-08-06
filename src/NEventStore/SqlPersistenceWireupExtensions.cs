@@ -4,6 +4,7 @@ namespace NEventStore
 
     public static class SqlPersistenceWireupExtensions
     {
+#if !PocketPC
         public static SqlPersistenceWireup UsingSqlPersistence(this Wireup wireup, string connectionName)
         {
             var factory = new ConfigurationConnectionFactory(connectionName);
@@ -16,6 +17,7 @@ namespace NEventStore
             var factory = new ConfigurationConnectionFactory(masterConnectionName, replicaConnectionName, 1);
             return wireup.UsingSqlPersistence(factory);
         }
+#endif
 
         public static SqlPersistenceWireup UsingSqlPersistence(this Wireup wireup, IConnectionFactory factory)
         {

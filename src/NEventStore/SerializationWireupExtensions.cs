@@ -6,7 +6,11 @@ namespace NEventStore
     {
         public static SerializationWireup UsingBinarySerialization(this PersistenceWireup wireup)
         {
-            return wireup.UsingCustomSerialization(new BinarySerializer());
+#if PocketPC
+            return wireup.UsingCustomSerialization(new SharpBinarySerializer());
+#else
+            return wireup.UsingCustomSerialization(new BinarySerializer()); 
+#endif
         }
 
         public static SerializationWireup UsingCustomSerialization(this PersistenceWireup wireup, ISerialize serializer)

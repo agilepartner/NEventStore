@@ -2,12 +2,16 @@ namespace NEventStore.Persistence.SqlPersistence
 {
     using System;
     using System.Threading;
-    using System.Web;
+#if !PocketPC
+    using System.Web; 
+#endif
     using NEventStore.Logging;
 
     public class ThreadScope<T> : IDisposable where T : class
     {
-        private readonly HttpContext _context = HttpContext.Current;
+#if !PocketPC
+        private readonly HttpContext _context = HttpContext.Current; 
+#endif
         private readonly T _current;
         private readonly ILog _logger = LogFactory.BuildLogger(typeof (ThreadScope<T>));
         private readonly bool _rootScope;
@@ -75,16 +79,19 @@ namespace NEventStore.Persistence.SqlPersistence
 
         private T Load()
         {
+#if !PocketPC
             if (_context != null)
             {
                 return _context.Items[_threadKey] as T;
-            }
+            } 
+#endif
 
             return Thread.GetData(Thread.GetNamedDataSlot(_threadKey)) as T;
         }
 
         private void Store(T value)
         {
+#if !PocketPC
             if (_context != null)
             {
                 _context.Items[_threadKey] = value;
@@ -92,7 +99,10 @@ namespace NEventStore.Persistence.SqlPersistence
             else
             {
                 Thread.SetData(Thread.GetNamedDataSlot(_threadKey), value);
-            }
+            } 
+#else
+            Thread.SetData(Thread.GetNamedDataSlot(_threadKey), value);
+#endif
         }
     }
 }

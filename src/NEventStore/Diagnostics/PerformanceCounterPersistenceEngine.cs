@@ -2,18 +2,24 @@ namespace NEventStore.Diagnostics
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
+#if !PocketPC
+    using System.Diagnostics; 
+#endif
     using NEventStore.Persistence;
 
     public class PerformanceCounterPersistenceEngine : IPersistStreams
     {
+#if !PocketPC
         private readonly PerformanceCounters _counters;
+#endif        
         private readonly IPersistStreams _persistence;
 
         public PerformanceCounterPersistenceEngine(IPersistStreams persistence, string instanceName)
         {
             _persistence = persistence;
-            _counters = new PerformanceCounters(instanceName);
+#if !PocketPC
+            _counters = new PerformanceCounters(instanceName); 
+#endif
         }
 
         public virtual void Initialize()
@@ -23,17 +29,23 @@ namespace NEventStore.Diagnostics
 
         public virtual void Commit(Commit attempt)
         {
+#if PocketPC
+            _persistence.Commit(attempt);
+#else
             Stopwatch clock = Stopwatch.StartNew();
             _persistence.Commit(attempt);
             clock.Stop();
 
-            _counters.CountCommit(attempt.Events.Count, clock.ElapsedMilliseconds);
+            _counters.CountCommit(attempt.Events.Count, clock.ElapsedMilliseconds); 
+#endif
         }
 
         public virtual void MarkCommitAsDispatched(Commit commit)
         {
             _persistence.MarkCommitAsDispatched(commit);
-            _counters.CountCommitDispatched();
+#if !PocketPC
+            _counters.CountCommitDispatched(); 
+#endif
         }
 
         public IEnumerable<Commit> GetFromTo(DateTime start, DateTime end)
@@ -61,7 +73,9 @@ namespace NEventStore.Diagnostics
             bool result = _persistence.AddSnapshot(snapshot);
             if (result)
             {
-                _counters.CountSnapshot();
+#if !PocketPC
+                _counters.CountSnapshot(); 
+#endif
             }
 
             return result;
@@ -105,7 +119,9 @@ namespace NEventStore.Diagnostics
                 return;
             }
 
-            _counters.Dispose();
+#if !PocketPC
+            _counters.Dispose(); 
+#endif
             _persistence.Dispose();
         }
     }

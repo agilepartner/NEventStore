@@ -2,7 +2,9 @@ namespace NEventStore
 {
     using System;
     using System.Transactions;
-    using NEventStore.Diagnostics;
+#if !PocketPC
+    using NEventStore.Diagnostics; 
+#endif
     using NEventStore.Logging;
     using NEventStore.Persistence;
     using NEventStore.Serialization;
@@ -11,8 +13,10 @@ namespace NEventStore
     {
         private static readonly ILog Logger = LogFactory.BuildLogger(typeof (PersistenceWireup));
         private bool _initialize;
+#if !PocketPC
         private bool _tracking;
         private string _trackingInstanceName;
+#endif
 
         public PersistenceWireup(Wireup inner)
             : base(inner)
@@ -39,6 +43,7 @@ namespace NEventStore
             return this;
         }
 
+#if !PocketPC
         public virtual PersistenceWireup TrackPerformanceInstance(string instanceName)
         {
             if (instanceName == null)
@@ -51,7 +56,8 @@ namespace NEventStore
             _trackingInstanceName = instanceName;
             return this;
         }
-
+#endif
+        
         public virtual PersistenceWireup EnlistInAmbientTransaction()
         {
             Logger.Debug(Messages.ConfiguringEngineEnlistment);
@@ -70,10 +76,12 @@ namespace NEventStore
                 engine.Initialize();
             }
 
+#if !PocketPC
             if (_tracking)
             {
                 Container.Register<IPersistStreams>(new PerformanceCounterPersistenceEngine(engine, _trackingInstanceName));
-            }
+            } 
+#endif
 
             return base.Build();
         }
