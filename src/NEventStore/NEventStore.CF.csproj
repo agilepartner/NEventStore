@@ -149,6 +149,10 @@
     <Compile Include="Persistence\SqlPersistence\SqlDialects\SqlCeStatements.Designer.cs">
       <DependentUpon>SqlCeStatements.resx</DependentUpon>
     </Compile>
+    <Compile Include="Persistence\SqlPersistence\SqlDialects\SqliteDialect.cs" />
+    <Compile Include="Persistence\SqlPersistence\SqlDialects\SqliteStatements.Designer.cs">
+      <DependentUpon>SqliteStatements.resx</DependentUpon>
+    </Compile>
     <Compile Include="Persistence\SqlPersistence\SqlPersistenceEngine.cs" />
     <Compile Include="Persistence\SqlPersistence\SqlPersistenceFactory.cs" />
     <Compile Include="Persistence\SqlPersistence\StreamHeadExtensions.cs" />
@@ -202,6 +206,7 @@
     <EmbeddedResource Include="Persistence\SqlPersistence\Messages.resx" />
     <EmbeddedResource Include="Persistence\SqlPersistence\SqlDialects\CommonSqlStatements.resx" />
     <EmbeddedResource Include="Persistence\SqlPersistence\SqlDialects\SqlCeStatements.resx" />
+    <EmbeddedResource Include="Persistence\SqlPersistence\SqlDialects\SqliteStatements.resx" />
     <EmbeddedResource Include="Resources.resx" />
     <EmbeddedResource Include="Serialization\Messages.resx" />
   </ItemGroup>
