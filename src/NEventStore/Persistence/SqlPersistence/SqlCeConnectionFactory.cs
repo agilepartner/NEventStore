@@ -12,47 +12,47 @@ namespace NEventStore.Persistence.SqlPersistence
     public class SqlCeConnectionFactory : IConnectionFactory
     {
         private const int DefaultShards = 16;
-        private const string DefaultConnectionName = "EventStore";
+        private const string DefaultDatabaseName = "EventStore.sdf";
 
         private static readonly ILog Logger = LogFactory.BuildLogger(typeof(SqlCeConnectionFactory));
 
-        private readonly ConnectionStringSettings _masterSettings;
-        private readonly ConnectionStringSettings _replicaSettings;
+        private readonly ConnectionStringSettings _master;
+        private readonly ConnectionStringSettings _replica;
         private readonly int _shards;
 
         public SqlCeConnectionFactory()
-            : this(new ConnectionStringSettings(DefaultConnectionName))
+            : this(new ConnectionStringSettings(DefaultDatabaseName))
         {
         }
 
-        public SqlCeConnectionFactory(ConnectionStringSettings masterSettings)
-            : this(masterSettings, masterSettings, DefaultShards)
+        public SqlCeConnectionFactory(ConnectionStringSettings master)
+            : this(master, master, DefaultShards)
         {
         }
 
-        public SqlCeConnectionFactory(ConnectionStringSettings masterSettings, ConnectionStringSettings replicaSettings, int shards)
+        public SqlCeConnectionFactory(ConnectionStringSettings master, ConnectionStringSettings replica, int shards)
         {
-            if (masterSettings == null)
-                throw new ArgumentNullException("masterSettings");
+            if (master == null)
+                throw new ArgumentNullException("master");
 
-            _masterSettings = masterSettings;
-            _replicaSettings = replicaSettings;
+            _master = master;
+            _replica = replica;
             _shards = shards >= 0 ? shards : DefaultShards;
 
             Logger.Debug(Messages.ConfiguringConnections,
-                _masterSettings.Name, _masterSettings.Name, _shards);
+                _master.Name, _master.Name, _shards);
         }
 
         public IDbConnection OpenMaster(Guid streamId)
         {
-            Logger.Verbose(Messages.OpeningMasterConnection, _masterSettings.Name);
-            return Open(streamId, _masterSettings);
+            Logger.Verbose(Messages.OpeningMasterConnection, _master.Name);
+            return Open(streamId, _master);
         }
 
         public IDbConnection OpenReplica(Guid streamId)
         {
-            Logger.Verbose(Messages.OpeningReplicaConnection, _replicaSettings.Name);
-            return Open(streamId, _replicaSettings);
+            Logger.Verbose(Messages.OpeningReplicaConnection, _replica.Name);
+            return Open(streamId, _replica);
         }
 
         private IDbConnection Open(Guid streamId, ConnectionStringSettings settings)

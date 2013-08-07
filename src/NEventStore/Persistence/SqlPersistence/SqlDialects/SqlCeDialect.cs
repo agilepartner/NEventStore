@@ -89,9 +89,15 @@ namespace NEventStore.Persistence.SqlPersistence.SqlDialects
                 // to be able to support a larger payload.
                 if (param.DbType == DbType.Binary)
                 {
-                    param.GetType().InvokeMember("SqlDbType",
-                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
-                        Type.DefaultBinder, param, new object[] { SqlDbType.Image });
+                    PropertyInfo property = param.GetType().GetProperty("SqlDbType", BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.Instance);
+                    if (property == null)
+                        throw new InvalidOperationException("Cannot find member SqlDbType");
+
+                    property.SetValue(param, SqlDbType.Image, null);
+
+                    //param.GetType().InvokeMember("SqlDbType",
+                    //    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
+                    //    Type.DefaultBinder, param, new object[] { SqlDbType.Image });
                 }
             }
         }

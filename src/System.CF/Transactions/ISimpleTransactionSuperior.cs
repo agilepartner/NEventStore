@@ -1,5 +1,5 @@
 //
-// TransactionScopeOption.cs
+// ISimpleTransactionSuperior.cs
 //
 // Author:
 //	Atsushi Enomoto  <atsushi@ximian.com>
@@ -10,10 +10,9 @@
 
 namespace System.Transactions
 {
-	public enum TransactionScopeOption {
-		Required,
-		RequiresNew,
-		Suppress,
+	public interface ISimpleTransactionSuperior : ITransactionPromoter
+	{
+		void Rollback ();
 	}
 }
 

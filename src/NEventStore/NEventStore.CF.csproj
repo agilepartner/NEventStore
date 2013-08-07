@@ -195,7 +195,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Messages.resx" />
+    <EmbeddedResource Include="Messages.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Persistence\SqlPersistence\Messages.resx" />
     <EmbeddedResource Include="Persistence\SqlPersistence\SqlDialects\CommonSqlStatements.resx" />
     <EmbeddedResource Include="Persistence\SqlPersistence\SqlDialects\SqlCeStatements.resx" />

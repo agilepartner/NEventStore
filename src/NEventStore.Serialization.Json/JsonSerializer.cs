@@ -7,6 +7,9 @@ namespace NEventStore.Serialization
     using System.Text;
     using NEventStore.Logging;
     using Newtonsoft.Json;
+#if PocketPC
+    using Messages = NEventStore.Serialization.Json.Messages_CF;
+#endif
 
     public class JsonSerializer : ISerialize
     {

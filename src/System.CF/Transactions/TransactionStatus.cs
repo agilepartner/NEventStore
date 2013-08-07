@@ -1,5 +1,5 @@
 //
-// TransactionScopeOption.cs
+// TransactionStatus.cs
 //
 // Author:
 //	Atsushi Enomoto  <atsushi@ximian.com>
@@ -10,10 +10,11 @@
 
 namespace System.Transactions
 {
-	public enum TransactionScopeOption {
-		Required,
-		RequiresNew,
-		Suppress,
+	public enum TransactionStatus {
+		Active,
+		Committed,
+		Aborted,
+		InDoubt
 	}
 }
 

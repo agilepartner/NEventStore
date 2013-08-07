@@ -1,5 +1,5 @@
 //
-// TransactionScopeOption.cs
+// EnlistmentOptions.cs
 //
 // Author:
 //	Atsushi Enomoto  <atsushi@ximian.com>
@@ -10,10 +10,10 @@
 
 namespace System.Transactions
 {
-	public enum TransactionScopeOption {
-		Required,
-		RequiresNew,
-		Suppress,
+	[Flags]
+	public enum EnlistmentOptions {
+		None,
+		EnlistDuringPrepareRequired,
 	}
 }
 
