@@ -102,6 +102,7 @@
     <Compile Include="IPipelineHook.cs" />
     <Compile Include="IStoreEvents.cs" />
     <Compile Include="LoggingWireupExtensions.cs" />
+    <Compile Include="Logging\CompactConsoleWindowLogger.cs" />
     <Compile Include="Logging\ExtensionMethods.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\LogFactory.cs" />

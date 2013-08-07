@@ -26,15 +26,13 @@ namespace NEventStore.Example.CF
         {
             _connectionSettings = new ConnectionStringSettings(EventStore);
 
-
-
             using (var scope = new TransactionScope())
             using (store = WireupEventStore())
             {
                 OpenOrCreateStream();
                 AppendToStream();
-                //TakeSnapshot();
-                //LoadFromSnapshotForwardAndAppend();
+                TakeSnapshot();
+                LoadFromSnapshotForwardAndAppend();
                 scope.Complete();
 
             }
@@ -61,7 +59,7 @@ namespace NEventStore.Example.CF
                    //.TrackPerformanceInstance("example")
                    .UsingJsonSerialization()
                        .Compress() 
-                       //.EncryptWith(EncryptionKey)
+                       .EncryptWith(EncryptionKey)
                .HookIntoPipelineUsing(new[] { new PipelineHook() })
                .UsingSynchronousDispatchScheduler()
                    .DispatchTo(new DelegateMessageDispatcher(DispatchCommit))
@@ -105,11 +103,28 @@ namespace NEventStore.Example.CF
                 var event1 = new TourStarted(StreamId);
                 var event2 = new TourSuspended(StreamId);
                 var event3 = new TourStarted(StreamId);
-                var event4 = new TourFinished(StreamId);
 
                 stream.Add(new EventMessage { Body = event1 });
                 stream.Add(new EventMessage { Body = event2 });
                 stream.Add(new EventMessage { Body = event3 });
+                stream.CommitChanges(Guid.NewGuid());
+            }
+        }
+
+        private static void TakeSnapshot()
+        {
+            var memento = new AggregateMemento { Value = "snapshot" };
+            store.Advanced.AddSnapshot(new Snapshot(StreamId, 2, memento));
+        }
+
+        private static void LoadFromSnapshotForwardAndAppend()
+        {
+            var latestSnapshot = store.Advanced.GetSnapshot(StreamId, int.MaxValue);
+
+            using (var stream = store.OpenStream(latestSnapshot, int.MaxValue))
+            {
+                var event4 = new TourFinished(StreamId);
+
                 stream.Add(new EventMessage { Body = event4 });
                 stream.CommitChanges(Guid.NewGuid());
             }

@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateMemento.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="PipelineHook.cs" />
     <Compile Include="Program.cs" />
