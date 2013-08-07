@@ -7,27 +7,36 @@ using NEventStore.Persistence.SqlPersistence;
 using NEventStore.Persistence.SqlPersistence.SqlDialects;
 using NEventStore.Dispatcher;
 using System.IO;
+using System.Windows.Forms;
 
 namespace NEventStore.Example.CF
 {
     class Program
     {
-        private static readonly Guid StreamId = Guid.NewGuid(); // aggregate identifier
         private static readonly byte[] EncryptionKey = new byte[]
 		{
 			0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf
-		}; 
-        private static IStoreEvents store;
-        private static ConnectionStringSettings _connectionSettings;
+		};
         private static readonly string StorageCard = @"\Storage Card";
         private static readonly string EventStore = "EventStore.sdf";
 
+        public static IStoreEvents Store;
+        private static Guid StreamId = Guid.NewGuid(); // aggregate identifier
+        private static ConnectionStringSettings _connectionSettings = new ConnectionStringSettings(EventStore);
+        private static MainView _mainView;
+
+#if FORMS
+        [MTAThread]
+        static void Main()
+        {
+            _mainView = new MainView();
+            Application.Run(_mainView);
+        }
+#else
         static void Main(string[] args)
         {
-            _connectionSettings = new ConnectionStringSettings(EventStore);
-
             using (var scope = new TransactionScope())
-            using (store = WireupEventStore())
+            using (Store = WireupEventStore())
             {
                 OpenOrCreateStream();
                 AppendToStream();
@@ -46,11 +55,16 @@ namespace NEventStore.Example.CF
             Console.WriteLine(Resources.PressAnyKey);
             Console.ReadLine();
         }
+#endif
 
-        private static IStoreEvents WireupEventStore()
+        public static IStoreEvents WireupEventStore()
         {
             return Wireup.Init()
-               //.LogToOutputWindow()
+#if FORMS
+               .LogTo(t => new RichTextLogger(t, _mainView.Log))
+#else
+               .LogToOutputWindow()
+#endif
                .UsingInMemoryPersistence()
                .UsingSqlCePersistence(_connectionSettings)
                    .WithDialect(new SqlCeDialect())
@@ -66,15 +80,20 @@ namespace NEventStore.Example.CF
                .Build();
         }
 
-        private static void DispatchCommit(Commit commit)
+        public static void DispatchCommit(Commit commit)
         {
             // This is where we'd hook into our messaging infrastructure, such as NServiceBus,
             // MassTransit, WCF, or some other communications infrastructure.
             // This can be a class as well--just implement IDispatchCommits.
+
             try
             {
                 foreach (var @event in commit.Events)
+#if FORMS
+                    new RichTextLogger(@event.GetType(), _mainView.Log).Info(Resources.MessagesDispatched + (@event.Body.ToString()));
+#else
                     Console.WriteLine(Resources.MessagesDispatched + (@event.Body.ToString()));
+#endif
             }
             catch (Exception)
             {
@@ -82,12 +101,14 @@ namespace NEventStore.Example.CF
             }
         }
 
-        private static void OpenOrCreateStream()
+        public static void OpenOrCreateStream()
         {
+            StreamId = Guid.NewGuid();
+
             // we can call CreateStream(StreamId) if we know there isn't going to be any data.
             // or we can call OpenStream(StreamId, 0, int.MaxValue) to read all commits,
             // if no commits exist then it creates a new stream for us.
-            using (var stream = store.OpenStream(StreamId, 0, int.MaxValue))
+            using (var stream = Store.OpenStream(StreamId, 0, int.MaxValue))
             {
                 var @event = new TourCreated(StreamId, "BT121", "BT121", "DEV123");
 
@@ -96,9 +117,9 @@ namespace NEventStore.Example.CF
             }
         }
 
-        private static void AppendToStream()
+        public static void AppendToStream()
         {
-            using (var stream = store.OpenStream(StreamId, int.MinValue, int.MaxValue))
+            using (var stream = Store.OpenStream(StreamId, int.MinValue, int.MaxValue))
             {
                 var event1 = new TourStarted(StreamId);
                 var event2 = new TourSuspended(StreamId);
@@ -111,17 +132,17 @@ namespace NEventStore.Example.CF
             }
         }
 
-        private static void TakeSnapshot()
+        public static void TakeSnapshot()
         {
             var memento = new AggregateMemento { Value = "snapshot" };
-            store.Advanced.AddSnapshot(new Snapshot(StreamId, 2, memento));
+            Store.Advanced.AddSnapshot(new Snapshot(StreamId, 2, memento));
         }
 
-        private static void LoadFromSnapshotForwardAndAppend()
+        public static void LoadFromSnapshotForwardAndAppend()
         {
-            var latestSnapshot = store.Advanced.GetSnapshot(StreamId, int.MaxValue);
+            var latestSnapshot = Store.Advanced.GetSnapshot(StreamId, int.MaxValue);
 
-            using (var stream = store.OpenStream(latestSnapshot, int.MaxValue))
+            using (var stream = Store.OpenStream(latestSnapshot, int.MaxValue))
             {
                 var event4 = new TourFinished(StreamId);
 

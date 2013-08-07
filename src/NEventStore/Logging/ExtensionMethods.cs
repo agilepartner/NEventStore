@@ -4,7 +4,7 @@ namespace NEventStore.Logging
     using System.Globalization;
     using System.Threading;
 
-    internal static class ExtensionMethods
+    public static class ExtensionMethods
     {
         private const string MessageFormat = "{0:yyyy/MM/dd HH:mm:ss.ff} - {1} - {2} - {3}";
 
