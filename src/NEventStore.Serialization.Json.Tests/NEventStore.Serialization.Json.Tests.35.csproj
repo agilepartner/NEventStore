@@ -8,8 +8,8 @@
     <ProjectGuid>{469EE113-3532-42AA-8098-4D287B4332B5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NEventStore.Tests</RootNamespace>
-    <AssemblyName>NEventStore.Tests</AssemblyName>
+    <RootNamespace>NEventStore.Serialization.Json.Tests</RootNamespace>
+    <AssemblyName>NEventStore.Serialization.Json.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
