@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Serialization.J
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Serialization.Json.Tests.35", "NEventStore.Serialization.Json.Tests\NEventStore.Serialization.Json.Tests.35.csproj", "{469EE113-3532-42AA-8098-4D287B4332B5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logging", "logging", "{0BFA87C3-5AF9-4772-BC7B-1848900DBCEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStore.Logging.Log4Net.CF", "EventStore.Logging.Log4Net.CF\EventStore.Logging.Log4Net.CF.csproj", "{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,10 @@ Global
 		{469EE113-3532-42AA-8098-4D287B4332B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{469EE113-3532-42AA-8098-4D287B4332B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{469EE113-3532-42AA-8098-4D287B4332B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +94,6 @@ Global
 		{469EE113-3532-42AA-8098-4D287B4332B5} = {F8F7E66B-1170-47F8-9B0A-B54A53E9D910}
 		{4A41A0B9-320E-4E86-8566-4B2E605E23BD} = {52117F90-3603-4FA3-8014-111FA6DE6DB4}
 		{8EEC3755-C99C-4A4B-BC61-10A22EC0C564} = {A460740D-8C8D-4E5D-860F-288A2583CFC0}
+		{B49932A5-9BDE-48F3-AD6C-F348F7563E5F} = {0BFA87C3-5AF9-4772-BC7B-1848900DBCEE}
 	EndGlobalSection
 EndGlobal
