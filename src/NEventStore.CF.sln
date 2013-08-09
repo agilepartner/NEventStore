@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Serialization.J
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logging", "logging", "{0BFA87C3-5AF9-4772-BC7B-1848900DBCEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStore.Logging.Log4Net.CF", "EventStore.Logging.Log4Net.CF\EventStore.Logging.Log4Net.CF.csproj", "{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventStore.Logging.Log4Net.CF", "NEventStore.Logging.Log4Net.CF\NEventStore.Logging.Log4Net.CF.csproj", "{B49932A5-9BDE-48F3-AD6C-F348F7563E5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
