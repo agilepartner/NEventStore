@@ -62,6 +62,7 @@
     <Compile Include="Dispatcher\IDispatchCommits.cs" />
     <Compile Include="Dispatcher\NullDispatcher.cs" />
     <Compile Include="Dispatcher\SynchronousDispatchScheduler.cs" />
+    <Compile Include="Dispatcher\TimerDispatchScheduler.cs" />
     <Compile Include="DispatchSchedulerPipelineHook.cs" />
     <Compile Include="EventUpconverterWireup.cs" />
     <Compile Include="EventUpconverterWireupExtensions.cs" />
@@ -203,6 +204,8 @@
     <Compile Include="SynchronousDispatcherWireupExtensions.cs" />
     <Compile Include="SynchronousDispatchSchedulerWireup.cs" />
     <Compile Include="SystemTime.cs" />
+    <Compile Include="TimerDispatchSchedulerWireup.cs" />
+    <Compile Include="TimerDispatchSchedulerWireupExtensions.cs" />
     <Compile Include="Wireup.cs" />
   </ItemGroup>
   <ItemGroup>

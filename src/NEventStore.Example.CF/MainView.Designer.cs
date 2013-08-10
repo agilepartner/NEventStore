@@ -36,6 +36,7 @@
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // Log
@@ -52,38 +53,44 @@
             // 
             this.mainMenu1.MenuItems.Add(this.menuItem1);
             this.mainMenu1.MenuItems.Add(this.menuItem4);
+            this.mainMenu1.MenuItems.Add(this.menuItem7);
             // 
             // menuItem1
             // 
             this.menuItem1.MenuItems.Add(this.menuItem2);
             this.menuItem1.MenuItems.Add(this.menuItem3);
-            this.menuItem1.Text = "Create";
+            this.menuItem1.Text = "Stream";
             // 
             // menuItem2
             // 
-            this.menuItem2.Text = "Stream";
+            this.menuItem2.Text = "Create";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
             // 
             // menuItem3
             // 
-            this.menuItem3.Text = "Snapshot";
+            this.menuItem3.Text = "Append events";
             this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
             // 
             // menuItem4
             // 
             this.menuItem4.MenuItems.Add(this.menuItem5);
             this.menuItem4.MenuItems.Add(this.menuItem6);
-            this.menuItem4.Text = "Events";
+            this.menuItem4.Text = "Snapshot";
             // 
             // menuItem5
             // 
-            this.menuItem5.Text = "Apend";
+            this.menuItem5.Text = "Create";
             this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
             // 
             // menuItem6
             // 
-            this.menuItem6.Text = "Load from snapshot";
+            this.menuItem6.Text = "Load";
             this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Text = "Copy DB";
+            this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
             // 
             // MainView
             // 
@@ -111,5 +118,6 @@
         private System.Windows.Forms.MenuItem menuItem5;
         private System.Windows.Forms.MenuItem menuItem6;
         internal Resco.Controls.RichTextBox.RichTextBox Log;
+        private System.Windows.Forms.MenuItem menuItem7;
     }
 }

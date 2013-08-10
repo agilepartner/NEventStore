@@ -28,8 +28,8 @@ namespace NEventStore.Dispatcher
 
         public virtual void ScheduleDispatch(Commit commit)
         {
-            DispatchImmediately(commit);
-            MarkAsDispatched(commit);
+            if (DispatchImmediately(commit))
+				MarkAsDispatched(commit);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -57,12 +57,12 @@ namespace NEventStore.Dispatcher
             }
         }
 
-        private void DispatchImmediately(Commit commit)
+        private bool DispatchImmediately(Commit commit)
         {
             try
             {
                 Logger.Info(Resources.SchedulingDispatch, commit.CommitId);
-                _dispatcher.Dispatch(commit);
+                return _dispatcher.Dispatch(commit);
             }
             catch
             {

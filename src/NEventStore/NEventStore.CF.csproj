@@ -54,6 +54,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.81.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dependencies\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=3be235df1c8d2ad3, processorArchitecture=MSIL" />
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
@@ -85,6 +89,7 @@
     <Compile Include="Dispatcher\IScheduleDispatches.cs" />
     <Compile Include="Dispatcher\NullDispatcher.cs" />
     <Compile Include="Dispatcher\SynchronousDispatchScheduler.cs" />
+    <Compile Include="Dispatcher\TimerDispatchScheduler.cs" />
     <Compile Include="DispatchSchedulerPipelineHook.cs" />
     <Compile Include="DuplicateCommitException.cs" />
     <Compile Include="EventMessage.cs" />
@@ -126,9 +131,9 @@
     <Compile Include="Persistence\IPersistStreams.cs" />
     <Compile Include="Persistence\PipelineHooksAwarePersistanceDecorator.cs" />
     <Compile Include="Persistence\SqlPersistence\CommitExtensions.cs" />
+    <Compile Include="Persistence\SqlPersistence\CompactConnectionFactory.cs" />
     <Compile Include="Persistence\SqlPersistence\ConnectionScope.cs" />
     <Compile Include="Persistence\SqlPersistence\ExtensionMethods.cs" />
-    <Compile Include="Persistence\SqlPersistence\SqlCeConnectionFactory.cs" />
     <Compile Include="Persistence\SqlPersistence\IConnectionFactory.cs" />
     <Compile Include="Persistence\SqlPersistence\IDbStatement.cs" />
     <Compile Include="Persistence\SqlPersistence\ISqlDialect.cs" />
@@ -192,6 +197,8 @@
     <Compile Include="SynchronousDispatcherWireupExtensions.cs" />
     <Compile Include="SynchronousDispatchSchedulerWireup.cs" />
     <Compile Include="SystemTime.cs" />
+    <Compile Include="TimerDispatchSchedulerWireup.cs" />
+    <Compile Include="TimerDispatchSchedulerWireupExtensions.cs" />
     <Compile Include="Wireup.cs">
       <SubType>Code</SubType>
     </Compile>

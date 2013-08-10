@@ -35,17 +35,22 @@ namespace NEventStore.Example.CF
 
         private void menuItem3_Click(object sender, EventArgs e)
         {
-            Program.TakeSnapshot();
+            Program.AppendToStream();
         }
 
         private void menuItem5_Click(object sender, EventArgs e)
         {
-            Program.AppendToStream();
+            Program.TakeSnapshot();
         }
 
         private void menuItem6_Click(object sender, EventArgs e)
         {
             Program.LoadFromSnapshotForwardAndAppend();
+        }
+
+        private void menuItem7_Click(object sender, EventArgs e)
+        {
+            Program.CopyEventStoreToStorageCard();
         }
 
 

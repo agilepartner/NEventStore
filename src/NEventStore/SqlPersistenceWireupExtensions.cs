@@ -5,9 +5,25 @@ namespace NEventStore
     public static class SqlPersistenceWireupExtensions
     {
 #if PocketPC
+        public static SqlPersistenceWireup UsingSqlCePersistence(this Wireup wireup, string databaseName)
+        {
+            return UsingSqlCePersistence(wireup, new ConnectionStringSettings(databaseName));
+        }
+
         public static SqlPersistenceWireup UsingSqlCePersistence(this Wireup wireup, ConnectionStringSettings master) 
         {
             var factory = new SqlCeConnectionFactory(master, master, 0);
+            return wireup.UsingSqlPersistence(factory);
+        }
+        
+        public static SqlPersistenceWireup UsingSQLitePersistence(this Wireup wireup, string databaseName)
+        {
+            return UsingSqlCePersistence(wireup, new ConnectionStringSettings(databaseName));
+        }
+
+        public static SqlPersistenceWireup UsingSQLitePersistence(this Wireup wireup, ConnectionStringSettings master)
+        {
+            var factory = new SQLiteConnectionFactory(master, master, 0);
             return wireup.UsingSqlPersistence(factory);
         }
 #else
@@ -23,13 +39,13 @@ namespace NEventStore
             var factory = new ConfigurationConnectionFactory(masterConnectionName, replicaConnectionName, 1);
             return wireup.UsingSqlPersistence(factory);
         }
+
 #endif
-
-
 
         public static SqlPersistenceWireup UsingSqlPersistence(this Wireup wireup, IConnectionFactory factory)
         {
             return new SqlPersistenceWireup(wireup, factory);
         }
+
     }
 }

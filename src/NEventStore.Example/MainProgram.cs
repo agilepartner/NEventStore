@@ -17,18 +17,36 @@ namespace NEventStore.Example
 
 		private static void Main()
 		{
-			using (var scope = new TransactionScope())
+			//using (var scope = new TransactionScope())
 			using (store = WireupEventStore())
 			{
 				OpenOrCreateStream();
 				AppendToStream();
 				TakeSnapshot();
 				LoadFromSnapshotForwardAndAppend();
-				scope.Complete();
-			}
+				//scope.Complete();
 
-			Console.WriteLine(Resources.PressAnyKey);
-			Console.ReadKey();
+				ConsoleKeyInfo key;
+				do {
+					Display();
+					key = Console.ReadKey();
+					switch(key.Key) {
+						case ConsoleKey.A:
+							Console.WriteLine("\nAppending events to stream");
+							AppendToStream();
+							break;
+						case ConsoleKey.Q:
+							Console.WriteLine("\nQuitting...");
+							break;
+					}
+
+				} while(key.Key != ConsoleKey.Q);
+			}
+		}
+
+		private static void Display() {
+			Console.WriteLine("a : Append events to stream");
+			Console.WriteLine("q : quit");
 		}
 
 		private static IStoreEvents WireupEventStore()
@@ -45,11 +63,11 @@ namespace NEventStore.Example
 						.Compress()
 						.EncryptWith(EncryptionKey)
 				.HookIntoPipelineUsing(new[] { new AuthorizationPipelineHook() })
-				.UsingSynchronousDispatchScheduler()
+				.UsingTimerDispatchScheduler(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5))
 					.DispatchTo(new DelegateMessageDispatcher(DispatchCommit))
 				.Build();
 		}
-		private static void DispatchCommit(Commit commit)
+		private static bool DispatchCommit(Commit commit)
 		{
 			// This is where we'd hook into our messaging infrastructure, such as NServiceBus,
 			// MassTransit, WCF, or some other communications infrastructure.
@@ -58,11 +76,14 @@ namespace NEventStore.Example
 			{
 				foreach (var @event in commit.Events)
 					Console.WriteLine(Resources.MessagesDispatched + ((SomeDomainEvent)@event.Body).Value);
+				return true;
 			}
 			catch (Exception)
 			{
 				Console.WriteLine(Resources.UnableToDispatch);
+				return false;
 			}
+
 		}
 
 		private static void OpenOrCreateStream()

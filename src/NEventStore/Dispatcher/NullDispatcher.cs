@@ -7,9 +7,10 @@ namespace NEventStore.Dispatcher
     {
         private static readonly ILog Logger = LogFactory.BuildLogger(typeof (NullDispatcher));
 
-        public void Dispatch(Commit commit)
+        public bool Dispatch(Commit commit)
         {
             Logger.Info(Resources.DispatchingToDevNull);
+			return true;
         }
 
         public void Dispose()

@@ -11,14 +11,16 @@ namespace System.Collections.Concurrent
     {
         private readonly Queue<T> _queue;
         private readonly int _maxSize;
-        private readonly Monitor2 _monitor;
+        //private readonly Monitor2 _monitor;
+        private readonly Semaphore _semaphore;
         private bool _closing;
 
         public BlockingCollection(Queue<T> innerQueue, int maxSize)
         {
             _queue = innerQueue;
             _maxSize = maxSize;
-            _monitor = new Monitor2();
+            //_monitor = new Monitor2();
+            _semaphore = new Semaphore(0, int.MaxValue);
         }
 
         public void Close()
@@ -26,7 +28,8 @@ namespace System.Collections.Concurrent
             lock (_queue)
             {
                 _closing = true;
-                _monitor.PulseAll();
+                _semaphore.Release();
+                //_monitor.PulseAll();
             }
         }
 
@@ -36,13 +39,15 @@ namespace System.Collections.Concurrent
             {
                 while (_queue.Count >= _maxSize)
                 {
-                    _monitor.Wait();
+                    _semaphore.WaitOne();
+                    //_monitor.Wait();
                 }
                 _queue.Enqueue(item);
                 if (_queue.Count == 1)
                 {
                     // wake up any blocked dequeue
-                    _monitor.PulseAll();
+                    _semaphore.Release();
+                    //_monitor.PulseAll();
                 }
             }
         }
@@ -58,13 +63,15 @@ namespace System.Collections.Concurrent
                         value = default(T);
                         return false;
                     }
-                    _monitor.Wait();
+                    _semaphore.WaitOne();
+                    //_monitor.Wait();
                 }
                 value = _queue.Dequeue();
                 if (_queue.Count == _maxSize - 1)
                 {
                     // wake up any blocked enqueue
-                    _monitor.PulseAll();
+                    _semaphore.Release();
+                    //_monitor.PulseAll();
                 }
                 return true;
             }

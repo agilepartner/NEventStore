@@ -4,9 +4,9 @@ namespace NEventStore.Dispatcher
 
     public class DelegateMessageDispatcher : IDispatchCommits
     {
-        private readonly Action<Commit> _dispatch;
+        private readonly Func<Commit, bool> _dispatch;
 
-        public DelegateMessageDispatcher(Action<Commit> dispatch)
+        public DelegateMessageDispatcher(Func<Commit, bool> dispatch)
         {
             _dispatch = dispatch;
         }
@@ -17,9 +17,9 @@ namespace NEventStore.Dispatcher
             GC.SuppressFinalize(this);
         }
 
-        public virtual void Dispatch(Commit commit)
+        public virtual bool Dispatch(Commit commit)
         {
-            _dispatch(commit);
+            return _dispatch(commit);
         }
 
         protected virtual void Dispose(bool disposing)

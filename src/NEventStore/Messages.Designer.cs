@@ -356,5 +356,16 @@ namespace NEventStore {
                 return ResourceManager.GetString("WrappingSerializerGZip", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Configuring the store to dispatch messages with timer.
+        /// </summary>
+        internal static string TimerDispatchSchedulerRegistered
+        {
+            get
+            {
+                return ResourceManager.GetString("TimerDispatchSchedulerRegistered", resourceCulture);
+            }
+        }
     }
 }

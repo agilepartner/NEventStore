@@ -18,11 +18,13 @@ namespace NEventStore.Example.CF
 			0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf
 		};
         private static readonly string StorageCard = @"\Storage Card";
-        private static readonly string EventStore = "EventStore.sdf";
+        private static readonly string EventStoreSqlCe = "EventStore.sdf";
+        private static readonly string EventStoreSQLite = "EventStore.db";
 
         public static IStoreEvents Store;
         private static Guid StreamId = Guid.NewGuid(); // aggregate identifier
-        private static ConnectionStringSettings _connectionSettings = new ConnectionStringSettings(EventStore);
+        //private static ConnectionStringSettings _connectionSettings = new ConnectionStringSettings(EventStoreSqlCe);
+        private static ConnectionStringSettings _connectionSettings = new ConnectionStringSettings(EventStoreSQLite);
         private static MainView _mainView;
 
 #if FORMS
@@ -46,11 +48,7 @@ namespace NEventStore.Example.CF
 
             }
 
-            if (Directory.Exists(StorageCard) && File.Exists(_connectionSettings.Name))
-            {
-                Console.WriteLine("Copy file {0} to storage card", _connectionSettings.Name);
-                File.Copy(_connectionSettings.Name, Path.Combine(StorageCard, EventStore), true);
-            }
+            CopyEventStoreToStorageCard();
 
             Console.WriteLine(Resources.PressAnyKey);
             Console.ReadLine();
@@ -61,26 +59,28 @@ namespace NEventStore.Example.CF
         {
             return Wireup.Init()
 #if FORMS
-               .LogTo(t => new RichTextLogger(t, _mainView.Log))
+               //.LogTo(t => new RichTextLogger(t, _mainView.Log))
 #else
                .LogToOutputWindow()
 #endif
                .UsingInMemoryPersistence()
-               .UsingSqlCePersistence(_connectionSettings)
-                   .WithDialect(new SqlCeDialect())
-                   .EnlistInAmbientTransaction() // two-phase commit
+                //.UsingSqlCePersistence(_connectionSettings)
+               //    .WithDialect(new SqlCeDialect())
+               .UsingSQLitePersistence(_connectionSettings)
+                    .WithDialect(new SqliteDialect())
+                   //.EnlistInAmbientTransaction() // two-phase commit
                    .InitializeStorageEngine()
                    //.TrackPerformanceInstance("example")
                    .UsingJsonSerialization()
                        .Compress() 
                        .EncryptWith(EncryptionKey)
                .HookIntoPipelineUsing(new[] { new PipelineHook() })
-               .UsingSynchronousDispatchScheduler()
+               .UsingTimerDispatchScheduler(TimeSpan.FromSeconds(15), TimeSpan.FromSeconds(15))
                    .DispatchTo(new DelegateMessageDispatcher(DispatchCommit))
                .Build();
         }
 
-        public static void DispatchCommit(Commit commit)
+        public static bool DispatchCommit(Commit commit)
         {
             // This is where we'd hook into our messaging infrastructure, such as NServiceBus,
             // MassTransit, WCF, or some other communications infrastructure.
@@ -90,14 +90,16 @@ namespace NEventStore.Example.CF
             {
                 foreach (var @event in commit.Events)
 #if FORMS
-                    new RichTextLogger(@event.GetType(), _mainView.Log).Info(Resources.MessagesDispatched + (@event.Body.ToString()));
+                    _mainView.Log.AppendText(Resources.MessagesDispatched + (@event.Body.ToString()) + Environment.NewLine);
 #else
                     Console.WriteLine(Resources.MessagesDispatched + (@event.Body.ToString()));
 #endif
+                return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Console.WriteLine(Resources.UnableToDispatch);
+                return false;
             }
         }
 
@@ -148,6 +150,17 @@ namespace NEventStore.Example.CF
 
                 stream.Add(new EventMessage { Body = event4 });
                 stream.CommitChanges(Guid.NewGuid());
+            }
+        }
+
+        public static void CopyEventStoreToStorageCard() 
+        {
+            Store.Dispose();
+            if (Directory.Exists(StorageCard) && File.Exists(_connectionSettings.Name))
+            {
+                Console.WriteLine("Copy file {0} to storage card", _connectionSettings.Name);
+                string path = Path.Combine(StorageCard, (_connectionSettings.Name.EndsWith(".sdf")) ? EventStoreSqlCe : EventStoreSQLite);
+                File.Copy(_connectionSettings.Name, path, true);
             }
         }
     }

@@ -9,10 +9,59 @@ using System.Globalization;
 
 namespace NEventStore.Persistence.SqlPersistence
 {
-    public class SqlCeConnectionFactory : IConnectionFactory
+    public class SQLiteConnectionFactory : CompactConnectionFactory
     {
-        private const int DefaultShards = 16;
+        private const string DefaultDatabaseName = "EventStore.db";
+
+        public SQLiteConnectionFactory()
+            : base(new ConnectionStringSettings(DefaultDatabaseName))
+        {
+        }
+
+        public SQLiteConnectionFactory(ConnectionStringSettings master)
+            : base(master, master, DefaultShards)
+        {
+        }
+
+        public SQLiteConnectionFactory(ConnectionStringSettings master, ConnectionStringSettings replica, int shards) 
+            : base(master, replica, shards)
+        {
+        }
+
+        protected override IDbConnection CreateConnection(string connectionString)
+        {
+            return new System.Data.SQLite.SQLiteConnection(connectionString);
+        }
+    }
+    public class SqlCeConnectionFactory : CompactConnectionFactory
+    {
         private const string DefaultDatabaseName = "EventStore.sdf";
+
+
+        public SqlCeConnectionFactory()
+            : base(new ConnectionStringSettings(DefaultDatabaseName))
+        {
+        }
+
+        public SqlCeConnectionFactory(ConnectionStringSettings master)
+            : base(master, master, DefaultShards)
+        {
+        }
+
+        public SqlCeConnectionFactory(ConnectionStringSettings master, ConnectionStringSettings replica, int shards) 
+            : base(master, replica, shards)
+        {
+        }
+        
+        protected override IDbConnection CreateConnection(string connectionString)
+        {
+            return new System.Data.SqlServerCe.SqlCeConnection(connectionString);
+        }
+    }
+    
+    public abstract class CompactConnectionFactory : IConnectionFactory
+    {
+        protected const int DefaultShards = 16;
 
         private static readonly ILog Logger = LogFactory.BuildLogger(typeof(SqlCeConnectionFactory));
 
@@ -20,17 +69,12 @@ namespace NEventStore.Persistence.SqlPersistence
         private readonly ConnectionStringSettings _replica;
         private readonly int _shards;
 
-        public SqlCeConnectionFactory()
-            : this(new ConnectionStringSettings(DefaultDatabaseName))
-        {
-        }
-
-        public SqlCeConnectionFactory(ConnectionStringSettings master)
+        public CompactConnectionFactory(ConnectionStringSettings master)
             : this(master, master, DefaultShards)
         {
         }
 
-        public SqlCeConnectionFactory(ConnectionStringSettings master, ConnectionStringSettings replica, int shards)
+        public CompactConnectionFactory(ConnectionStringSettings master, ConnectionStringSettings replica, int shards)
         {
             if (master == null)
                 throw new ArgumentNullException("master");
@@ -62,9 +106,9 @@ namespace NEventStore.Persistence.SqlPersistence
             return new ConnectionScope(connectionString, () => OpenConnection(connectionString));
         }
 
-        private static IDbConnection OpenConnection(string connectionString)
+        private IDbConnection OpenConnection(string connectionString)
         {
-            var connection = new System.Data.SqlServerCe.SqlCeConnection(connectionString);
+            var connection = CreateConnection(connectionString);
             try
             {
                 connection.Open();
@@ -75,6 +119,8 @@ namespace NEventStore.Persistence.SqlPersistence
             }
             return connection;
         }
+
+        protected abstract IDbConnection CreateConnection(string connectionString);
 
         protected virtual string BuildConnectionString(Guid streamId, ConnectionStringSettings setting)
         {
