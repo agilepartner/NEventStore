@@ -48,10 +48,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="Polenter.SharpSerializer.Compact, Version=2.18.0.0, Culture=neutral, PublicKeyToken=8f4f20011571ee5f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dependencies\SharpSerializer\lib\net20-cf\Polenter.SharpSerializer.Compact.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.81.0, Culture=neutral, PublicKeyToken=1fdb50b1b62b4c84, processorArchitecture=MSIL">
@@ -189,7 +185,6 @@
     </Compile>
     <Compile Include="Serialization\RijndaelSerializer.cs" />
     <Compile Include="Serialization\SerializationExtensions.cs" />
-    <Compile Include="Serialization\SharpBinarySerializer.cs" />
     <Compile Include="Snapshot.cs" />
     <Compile Include="SqlPersistenceWireup.cs" />
     <Compile Include="SqlPersistenceWireupExtensions.cs" />

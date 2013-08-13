@@ -17,30 +17,33 @@ namespace NEventStore.Api.Controllers
             _store = store;
         }
 
-		public StreamFeed Get() 
+		public EventStoreFeed Get() 
 		{
 			// TODO : set default start date
 			DateTime start = DateTime.Now.AddDays(-7);
 
-			StreamFeed feed = new StreamFeed { Title = "Streams", Summary= "", Author = "EventStore" };
+			string link = this.Url.Link("DefaultApi", null);
+			Uri uri = new Uri(link);
 
-			var commits = _store.Advanced.GetFrom(start);
+			EventStoreFeed feed = new EventStoreFeed(String.Format("{0}@{1}", FeedValues.StreamFeedName, uri.DnsSafeHost));
 
-			var streams = new List<StreamInfo>();
+			var commits = _store.Advanced.GetFrom(start).ToList();
+
+			var streams = new List<Stream>();
 			foreach(var streamId in commits.Select(c => c.StreamId).Distinct())
 			{
 				IEventStream stream = _store.OpenStream(streamId, 0, int.MaxValue);
-				streams.Add(new StreamInfo(stream));
+				streams.Add(new Stream(stream));
 			}
 			feed.Streams = streams;
 
 			return feed;
 		}
 
-		public Stream Get(Guid id) 
+		public StreamFeed Get(Guid id) 
 		{
 			IEventStream eventStream = _store.OpenStream(id, 0, int.MaxValue);
-			Stream stream = new Stream(eventStream);
+			StreamFeed stream = new StreamFeed(eventStream);
 
 			return stream;
 		}

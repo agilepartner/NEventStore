@@ -62,7 +62,7 @@ namespace NEventStore.Api.Tests.Models
 			eventStream.CommittedHeaders.Returns(new Dictionary<string, object> { { "Header", "Value" } });
 			eventStream.CommittedEvents.Returns(new List<EventMessage> { CreateEventMessage(), CreateEventMessage() });
 
-			Stream stream = new Stream(eventStream);
+			StreamFeed stream = new StreamFeed(eventStream);
 
 			Assert.That(stream.Id, Is.EqualTo(StreamId));
 			Assert.That(stream.Title, Is.StringContaining(StreamId.ToString()));

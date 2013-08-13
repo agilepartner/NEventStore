@@ -66,12 +66,15 @@ namespace NEventStore.Api.Syndication.Atom.AtomPub
             command.PublishDate = GetPublishDate(item.PublishDate);
         }
 
-        private static SyndicationContent GetSyndicationContent(string content, string contentType)
+        private static SyndicationContent GetSyndicationContent(object content, string contentType)
         {
-            if (content.IsNullOrEmpty() || contentType.ToLowerInvariant() == PublicationContentTypes.Text)
-                return SyndicationContent.CreatePlaintextContent(content ?? string.Empty);
+            if (content == null || contentType.ToLowerInvariant() == PublicationContentTypes.Text)
+                return SyndicationContent.CreatePlaintextContent(content.ToString() ?? string.Empty);
 
-            return SyndicationContent.CreateHtmlContent(content);
+			if (contentType.ToLowerInvariant() == PublicationContentTypes.Xml)
+				return SyndicationContent.CreateXmlContent(content);
+
+            return SyndicationContent.CreateHtmlContent(content.ToString());
         }
 
         public static DateTime GetPublishDate(DateTimeOffset syndicationDate)
@@ -80,5 +83,6 @@ namespace NEventStore.Api.Syndication.Atom.AtomPub
             // if the publish date has not been set it will be equal to DateTime.MinValue
             return publishDate == DateTime.MinValue ? DateTime.UtcNow : publishDate;
         }
+
     }
 }

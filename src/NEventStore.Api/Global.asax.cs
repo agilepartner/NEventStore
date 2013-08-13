@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -20,7 +23,7 @@ namespace NEventStore.Api {
 			var builder = new ContainerBuilder();
 
 			var wireup = StoreWireup();
-			builder.Register(c => wireup.Build()).InstancePerApiRequest();
+			builder.Register(c => wireup.Build()).SingleInstance();
 
 			builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
 
@@ -38,11 +41,35 @@ namespace NEventStore.Api {
 		private Wireup StoreWireup()
 		{
 			return Wireup.Init()
-			   .UsingSqlPersistence("EventStore")
+				.LogToOutputWindow()
+				.UsingSqlPersistence("EventStore")
 				   .WithDialect(new MsSqlDialect())
-				   .UsingJsonSerialization()
-					   .Compress()
-					   .EncryptWith(Encryption.Key);
+				.UsingJsonSerialization(() => LoadEventLibraryTypes())
+					.Compress()
+					.EncryptWith(Encryption.Key);
+		}
+
+		private IEnumerable<Type> LoadEventLibraryTypes()
+		{
+			//System.Diagnostics.Debugger.Break();
+
+			List<Type> types = new List<Type>();
+			//var pluginDir = HttpContext.Current.Server.MapPath("~/Events");
+			//foreach(var assemblyFile in Directory.GetFiles(pluginDir, "*.dll"))
+			//{
+			//	var assembly = Assembly.LoadFile(assemblyFile);
+			//	foreach(var type in assembly.GetTypes())
+			//	{
+			//		types.Add(type);
+			//		//if(!type.IsSubclassOf(typeof(IEnumerable)))
+			//		//{
+			//		//	var enumerableType = typeof(IEnumerable<>).MakeGenericType(type);
+			//		//	types.Add(enumerableType);
+			//		//}
+
+			//	}
+			//}
+			return types;
 		}
 	}
 }

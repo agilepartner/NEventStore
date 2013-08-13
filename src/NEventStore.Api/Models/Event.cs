@@ -18,7 +18,7 @@ namespace NEventStore.Api.Models
 		public string Slug { get; set; }
 		public string Summary { get; set; }
 		public string ContentType { get; set; }
-		public string Content { get; set; }
+		public object Content { get; set; }
 		public string[] Tags { get; set; }
 		public DateTime PublishDate { get; set; }
 		public DateTime LastUpdated { get; set; }
@@ -36,11 +36,11 @@ namespace NEventStore.Api.Models
 			this.StreamId = stream.StreamId;
 			this.EventCount = stream.CommittedEvents.Count;
 
-			this.Title = String.Format("{0}@{1}", id, stream.StreamId);
+			this.Title = stream.GetEventTitle(id);
 			this.Summary = evt.Body.GetType().Name;
-			this.ContentType = "application/json";
+			this.ContentType = PublicationContentTypes.Text;
 			this.Content = JsonConvert.SerializeObject(evt.Body);
-			this.Tags = evt.Headers.Select(p => String.Format("{0}={1}", p.Key, p.Value)).ToArray();
+			this.Tags = evt.GetTags().ToArray();
 		}
 
 		string IPublication.Id

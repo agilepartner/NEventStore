@@ -14,6 +14,7 @@ namespace NEventStore.Api {
 			//Formatters
 			config.Formatters.Remove(config.Formatters.XmlFormatter);
 			config.Formatters.Add(new NEventStore.Api.Syndication.Atom.AtomPub.AtomPubMediaFormatter());
+			config.Formatters.JsonFormatter.SupportedMediaTypes.Clear();
 
 			//Enricher
 			config.AddResponseEnrichers(new StreamResponseEnricher());

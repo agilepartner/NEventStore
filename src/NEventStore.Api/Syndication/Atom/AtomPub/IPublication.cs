@@ -27,7 +27,7 @@ namespace NEventStore.Api.Syndication.Atom.AtomPub
         /// <summary>
         /// The content of the publication.
         /// </summary>
-        string Content { get; }
+        object Content { get; }
 
         /// <summary>
         /// The type of content. Either "text", "html", "xhtml" or a valid MIME media type.

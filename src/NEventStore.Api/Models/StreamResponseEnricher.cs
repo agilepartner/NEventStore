@@ -17,9 +17,9 @@ namespace NEventStore.Api.Models
 			var content = response.Content as ObjectContent;
 
 			return content != null
-				&& (content.ObjectType == typeof(Stream) ||
-					content.ObjectType == typeof(StreamFeed) ||
-					content.ObjectType == typeof(StreamInfo) ||
+				&& (content.ObjectType == typeof(StreamFeed) ||
+					content.ObjectType == typeof(EventStoreFeed) ||
+					content.ObjectType == typeof(Stream) ||
 					content.ObjectType == typeof(Event)
 					);
 		}
@@ -28,16 +28,23 @@ namespace NEventStore.Api.Models
 		{
 			var url = response.RequestMessage.GetUrlHelper();
 
-			Stream stream;
-			if(response.TryGetContentValue<Stream>(out stream))
+			Event evt;
+			if(response.TryGetContentValue<Event>(out evt)) 
+			{
+				Enrich(evt, url);
+				return response;
+			}
+
+			StreamFeed stream;
+			if(response.TryGetContentValue<StreamFeed>(out stream))
 			{
 				stream.Events.ForEach(e => Enrich(e, url));
 				Enrich(stream, url);
 				return response;
 			}
 
-			StreamFeed feed;
-			if(response.TryGetContentValue<StreamFeed>(out feed))
+			EventStoreFeed feed;
+			if(response.TryGetContentValue<EventStoreFeed>(out feed))
 			{
 				feed.Streams.ForEach(s => Enrich(s, url));
 				Enrich(feed, url);
@@ -46,20 +53,20 @@ namespace NEventStore.Api.Models
 			return response;
 		}
 
-		private void Enrich(StreamFeed feed, UrlHelper url)
+		private void Enrich(EventStoreFeed feed, UrlHelper url)
 		{
 			var selfUrl = url.Link("DefaultApi", new { controller = "stream" });
 			feed.AddLink(new SelfLink(selfUrl));
 		}
 
-		private void Enrich(Stream stream, UrlHelper url)
+		private void Enrich(StreamFeed stream, UrlHelper url)
 		{
 			var selfUrl = url.Link("DefaultApi", new { controller = "stream", id = stream.Id });
 			stream.AddLink(new SelfLink(selfUrl));
 			stream.AddLink(new EditLink(selfUrl));
 		}
 
-		private void Enrich(StreamInfo stream, UrlHelper url)
+		private void Enrich(Stream stream, UrlHelper url)
 		{
 			var selfUrl = url.Link("DefaultApi", new { controller = "stream", id = stream.Id });
 			//var previousUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = (evt.Id == 1) ? 1 : evt.Id - 1 });
