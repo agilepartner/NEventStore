@@ -142,6 +142,7 @@
     <Compile Include="Controllers\DispatchControllerFixture.cs" />
     <Compile Include="Controllers\DispatchControllerIntegrationFixture.cs" />
     <Compile Include="EventStoreExtensions.cs" />
+    <Compile Include="Models\ModelsFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\CommitControllerFixture.cs" />
   </ItemGroup>

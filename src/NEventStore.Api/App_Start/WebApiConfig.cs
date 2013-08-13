@@ -2,16 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using NEventStore.Api.Models;
+using NEventStore.Api.Syndication.Atom;
 
 namespace NEventStore.Api {
 	public static class WebApiConfig {
 		public static void Register(HttpConfiguration config) {
+			//Handlers
+			config.MessageHandlers.Add(new EnrichingHandler());
+			
+			//Formatters
+			config.Formatters.Remove(config.Formatters.XmlFormatter);
+			config.Formatters.Add(new NEventStore.Api.Syndication.Atom.AtomPub.AtomPubMediaFormatter());
+
+			//Enricher
+			config.AddResponseEnrichers(new StreamResponseEnricher());
+
+			// Routes
 			config.Routes.MapHttpRoute(
 				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
+				routeTemplate: "api/{controller}/{id}/{sequence}",
 				defaults: new
 				{
-					id = RouteParameter.Optional
+					id = RouteParameter.Optional,
+					sequence = RouteParameter.Optional
 				}
 			);
 
