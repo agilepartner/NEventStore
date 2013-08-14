@@ -196,7 +196,6 @@
     <Compile Include="Models\Headers.cs" />
     <Compile Include="Models\Stream.cs" />
     <Compile Include="Models\StreamMetadata.cs" />
-    <Compile Include="MvcApplication.cs" />
     <Compile Include="Routing.cs" />
     <Compile Include="Syndication\Atom\AtomPoller.cs" />
     <Compile Include="Syndication\Atom\IResponseEnricher.cs" />
@@ -247,7 +246,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Events\" />
   </ItemGroup>
   <ItemGroup>

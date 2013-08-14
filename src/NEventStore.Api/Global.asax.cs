@@ -25,7 +25,7 @@ namespace NEventStore.Api {
 			var wireup = StoreWireup();
 			builder.Register(c => wireup.Build()).SingleInstance();
 
-			builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
+			builder.RegisterApiControllers(typeof(Routing).Assembly);
 
 			var container = builder.Build();
 
