@@ -171,15 +171,15 @@
     <Compile Include="..\VersionAssemblyInfo.cs">
       <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DispatchController.cs" />
-    <Compile Include="Controllers\StreamController.cs" />
+    <Compile Include="Controllers\StreamsController.cs" />
     <Compile Include="Controllers\CommitController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="Extensions\Ensure.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Filters\ExceptionShieldingAttribute.cs" />
     <Compile Include="Messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -195,7 +195,10 @@
     <Compile Include="Models\FeedValues.cs" />
     <Compile Include="Models\Headers.cs" />
     <Compile Include="Models\Stream.cs" />
+    <Compile Include="Models\StreamMetadata.cs" />
     <Compile Include="MvcApplication.cs" />
+    <Compile Include="Routing.cs" />
+    <Compile Include="Syndication\Atom\AtomPoller.cs" />
     <Compile Include="Syndication\Atom\IResponseEnricher.cs" />
     <Compile Include="Models\StreamResponseEnricher.cs" />
     <Compile Include="Models\StreamFeed.cs" />

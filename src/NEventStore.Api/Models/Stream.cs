@@ -1,40 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using NEventStore.Api.Syndication.Atom.AtomPub;
 using NEventStore.Api.Syndication.Atom.Links;
-using Newtonsoft.Json;
 
 namespace NEventStore.Api.Models
 {
 	public class Stream : Resource, IPublication
 	{
-		public Guid Id { get; set; }
-		public string Title { get; set; }
-		public string Slug { get; set; }
-		public string Summary { get; set; }
-		public string ContentType { get; set; }
-		public object Content { get; set; }
-		public string[] Tags { get; set; }
-		public DateTime PublishDate { get; set; }
-		public DateTime LastUpdated { get; set; }
-		public string CategoriesScheme { get; set; }
+		public Guid Id { get; private set; }
+		public string Title { get; private set; }
+		public string Slug { get; private set; }
+		public string Summary { get; private set; }
+		public string ContentType { get; private set; }
+		public object Content { get; private set; }
+		public string[] Tags { get; private set; }
+		public DateTime PublishDate { get; private set; }
+		public DateTime LastUpdated { get; private set; }
+		public string CategoriesScheme { get; private set; }
 
-		public Stream()
+		private Stream()
 		{
 			PublishDate = DateTime.UtcNow;
 		}
 
-		public Stream(IEventStream stream)
-			: this()
+		public static Stream FromStream(IEventStream eventStream, DateTime lastUpdated)
 		{
-			this.Id = stream.StreamId;
-			this.Title = stream.GetTitle();
-			this.Summary = stream.GetSummary();
-			this.ContentType = PublicationContentTypes.Text;
-			this.Content = JsonConvert.SerializeObject(stream.CommittedEvents.Select(e => e.Body).ToArray());
-			this.Tags = stream.GetTags().ToArray();
+			var stream = new Stream();
+
+			stream.Id = eventStream.StreamId;
+			stream.Title = eventStream.GetTitle();
+			stream.Summary = eventStream.GetSummary();
+			stream.ContentType = PublicationContentTypes.Xml;
+			stream.Content = new StreamMetadata(eventStream.StreamRevision, eventStream.CommitSequence, eventStream.CommittedEvents.Count);
+			stream.Tags = eventStream.GetTags().ToArray();
+			stream.LastUpdated = lastUpdated;
+
+			return stream;
 		}
 
 		string IPublication.Id

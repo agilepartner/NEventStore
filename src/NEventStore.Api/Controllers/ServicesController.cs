@@ -25,15 +25,9 @@ namespace NEventStore.Api.Controllers
 			};
 
 			var streams = new ResourceCollectionInfo("Streams",
-				new Uri(Url.Link("DefaultApi", new { controller = "Stream" })));
+				new Uri(Url.Link(Routing.Routes.Default, new { controller = Routing.Controllers.Streams })));
 
 			streams.Accepts.Add("application/atom+xml;type=entry");
-
-			// For WLW to work we need to include format in the categories URI.
-			// Hoping to provide a better solution than this.
-			var categoriesUri = new Uri(Url.Link("DefaultApi", new { controller = "tags", format = "atomcat" }));
-			var categories = new ReferencedCategoriesDocument(categoriesUri);
-			streams.Categories.Add(categories);
 
 			ws.Collections.Add(streams);
 

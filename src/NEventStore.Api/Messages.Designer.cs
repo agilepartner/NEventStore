@@ -61,11 +61,92 @@ namespace NEventStore.Api {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day should be between 1 and {0}.
+        /// </summary>
+        internal static string DayOutOfRange {
+            get {
+                return ResourceManager.GetString("DayOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From should be 0 or more.
+        /// </summary>
+        internal static string FromOutOfRange {
+            get {
+                return ResourceManager.GetString("FromOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unspecidied error occurred while processing your request.
+        /// </summary>
+        internal static string GeneralExceptionMessage {
+            get {
+                return ResourceManager.GetString("GeneralExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading Event Library Plugin {0}.
         /// </summary>
         internal static string LoadingEventLibraryPlugin {
             get {
                 return ResourceManager.GetString("LoadingEventLibraryPlugin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month shoud be between 1 and 12.
+        /// </summary>
+        internal static string MonthOutOfRange {
+            get {
+                return ResourceManager.GetString("MonthOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stream id should not be null.
+        /// </summary>
+        internal static string NullStreamId {
+            get {
+                return ResourceManager.GetString("NullStreamId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number should be 0 or more.
+        /// </summary>
+        internal static string NumberOutOfRange {
+            get {
+                return ResourceManager.GetString("NumberOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take should be 1 or more.
+        /// </summary>
+        internal static string TakeOutOfRange {
+            get {
+                return ResourceManager.GetString("TakeOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown stream type.
+        /// </summary>
+        internal static string UnknownStreamType {
+            get {
+                return ResourceManager.GetString("UnknownStreamType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year should be greater than 1900.
+        /// </summary>
+        internal static string YearOutOfRange {
+            get {
+                return ResourceManager.GetString("YearOutOfRange", resourceCulture);
             }
         }
     }

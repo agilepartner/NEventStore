@@ -1,46 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using NEventStore.Api.Syndication.Atom.AtomPub;
 using NEventStore.Api.Syndication.Atom.Links;
-using Newtonsoft.Json;
 
 namespace NEventStore.Api.Models
 {
 	public class Event : Resource, IPublication
 	{
-		public int Id { get; set; }
-		public Guid StreamId { get; set; }
-		public int EventCount { get; set; }
+		public int Id { get; private set; }
+		public Guid StreamId { get; private set; }
+		public int EventCount { get; private set; }
 
-		public string Title { get; set; }
-		public string Slug { get; set; }
-		public string Summary { get; set; }
-		public string ContentType { get; set; }
-		public object Content { get; set; }
-		public string[] Tags { get; set; }
-		public DateTime PublishDate { get; set; }
-		public DateTime LastUpdated { get; set; }
-		public string CategoriesScheme { get; set; }
+		public string Title { get; private set; }
+		public string Slug { get; private set; }
+		public string Summary { get; private set; }
+		public string ContentType { get; private set; }
+		public object Content { get; private set; }
+		public string[] Tags { get; private set; }
+		public DateTime PublishDate { get; private set; }
+		public DateTime LastUpdated { get; private set; }
+		public string CategoriesScheme { get; private set; }
 
-		public Event()
+		private	 Event()
 		{
 			PublishDate = DateTime.UtcNow;
 		}
 
-		public Event(IEventStream stream, EventMessage evt, int id)
-			: this()
+		public static Event FromStream(IEventStream stream, EventMessage eventMessage, int id)
 		{
-			this.Id = id;
-			this.StreamId = stream.StreamId;
-			this.EventCount = stream.CommittedEvents.Count;
+			var @event = new Event();
+			@event.Id = id;
+			@event.StreamId = stream.StreamId;
+			@event.EventCount = stream.CommittedEvents.Count;
 
-			this.Title = stream.GetEventTitle(id);
-			this.Summary = evt.Body.GetType().Name;
-			this.ContentType = PublicationContentTypes.Text;
-			this.Content = JsonConvert.SerializeObject(evt.Body);
-			this.Tags = evt.GetTags().ToArray();
+			@event.Title = stream.GetEventTitle(id);
+			@event.Summary = eventMessage.Body.GetType().Name;
+			@event.ContentType = PublicationContentTypes.Xml;
+			@event.Content = eventMessage.Body;
+			@event.Tags = eventMessage.GetTags().ToArray();
+
+			return @event;
 		}
 
 		string IPublication.Id

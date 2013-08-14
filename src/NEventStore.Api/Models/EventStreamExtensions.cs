@@ -22,23 +22,17 @@ namespace NEventStore.Api.Models
 			if(stream.CommittedHeaders.ContainsKey(Headers.AggregateTypeHeader))
 				return stream.CommittedHeaders[Headers.AggregateTypeHeader].ToString();
 
-			return "Unknown stream type";
+			return Messages.UnknownStreamType;
 		}
 
 		public static IEnumerable<string> GetTags(this IEventStream stream) 
 		{
-			return stream.CommittedHeaders.GetTags().Union(stream.GetStreamMetaDataTags());
+			return stream.CommittedHeaders.GetTags();
 		}
 
 		public static IEnumerable<string> GetTags(this EventMessage evt) 
 		{
 			return evt.Headers.GetTags();
-		}
-
-		private static IEnumerable<string> GetStreamMetaDataTags(this IEventStream stream) 
-		{
-			yield return FormatTag("StreamRevision", stream.StreamRevision);
-			yield return FormatTag("CommitSequence", stream.CommitSequence);
 		}
 
 		private static IEnumerable<string> GetTags(this IDictionary<string, object> headers)

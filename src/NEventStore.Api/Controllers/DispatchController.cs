@@ -32,12 +32,14 @@ namespace NEventStore.Api.Controllers
 				{
 					stream.CommitChanges(commit.CommitId);
 					scope.Complete();
-					return new HttpResponseMessage(HttpStatusCode.Created);
+
+					return CreatedResponse(commit);
 				}
 				catch(DuplicateCommitException)
 				{
+					//Idempotency
 					stream.ClearChanges();
-					return new HttpResponseMessage(HttpStatusCode.Created);
+					return CreatedResponse(commit);
 				}
 				catch(ConcurrencyException)
 				{
@@ -46,10 +48,27 @@ namespace NEventStore.Api.Controllers
 				}
 				catch(StorageException)
 				{
+					stream.ClearChanges();
 					throw new HttpResponseException(HttpStatusCode.InternalServerError);
 				}
 
 			}
+		}
+
+		private HttpResponseMessage CreatedResponse(Commit commit)
+		{
+			var response = this.Request.CreateResponse(HttpStatusCode.Created);
+			string uri = Url.Link(Routing.Routes.Range, new
+			{
+				controller = Routing.Controllers.Streams,
+				id = commit.StreamId,
+				action = Routing.Actions.Range,
+				from = commit.StreamRevision - commit.Events.Count,
+				take = commit.Events.Count
+			});
+			response.Headers.Location = new Uri(uri);
+
+			return response;
 		}
 
 		private IEventStream PrepareStream(Commit commit)

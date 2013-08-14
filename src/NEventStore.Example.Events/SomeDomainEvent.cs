@@ -1,7 +1,14 @@
-﻿namespace NEventStore.Example
+﻿using System;
+namespace NEventStore.Example
 {
+	[Serializable]
 	public class SomeDomainEvent
 	{
-		public string Value { get; set; }
+		public SomeDomainEvent(string value)
+		{
+			Value = value;
+		}
+
+		public readonly string Value;
 	}
 }

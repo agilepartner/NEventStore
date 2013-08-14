@@ -35,7 +35,6 @@ namespace NEventStore.Api {
 			AreaRegistration.RegisterAllAreas();
 
 			WebApiConfig.Register(GlobalConfiguration.Configuration);
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 		}
 
 		private Wireup StoreWireup()

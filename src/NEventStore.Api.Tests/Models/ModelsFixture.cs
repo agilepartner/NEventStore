@@ -21,7 +21,7 @@ namespace NEventStore.Api.Tests.Models
 			stream.StreamId.Returns(StreamId);
 			EventMessage eventMessage = CreateEventMessage();
 
-			Event evt = new Event(stream, eventMessage, 2);
+			Event evt = Event.FromStream(stream, eventMessage, 2);
 
 			Assert.That(evt.Id, Is.EqualTo(2));
 			Assert.That(evt.Content, Is.Not.Null.Or.Empty);
@@ -62,7 +62,7 @@ namespace NEventStore.Api.Tests.Models
 			eventStream.CommittedHeaders.Returns(new Dictionary<string, object> { { "Header", "Value" } });
 			eventStream.CommittedEvents.Returns(new List<EventMessage> { CreateEventMessage(), CreateEventMessage() });
 
-			StreamFeed stream = new StreamFeed(eventStream);
+			StreamFeed stream = StreamFeed.FromStream(eventStream, 1, 5);
 
 			Assert.That(stream.Id, Is.EqualTo(StreamId));
 			Assert.That(stream.Title, Is.StringContaining(StreamId.ToString()));

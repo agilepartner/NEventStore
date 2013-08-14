@@ -117,7 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DayOutOfRange" xml:space="preserve">
+    <value>Day should be between 1 and {0}</value>
+  </data>
+  <data name="FromOutOfRange" xml:space="preserve">
+    <value>From should be 0 or more</value>
+  </data>
+  <data name="GeneralExceptionMessage" xml:space="preserve">
+    <value>An unspecidied error occurred while processing your request</value>
+  </data>
   <data name="LoadingEventLibraryPlugin" xml:space="preserve">
     <value>Loading Event Library Plugin {0}</value>
+  </data>
+  <data name="MonthOutOfRange" xml:space="preserve">
+    <value>Month shoud be between 1 and 12</value>
+  </data>
+  <data name="NullStreamId" xml:space="preserve">
+    <value>Stream id should not be null</value>
+  </data>
+  <data name="NumberOutOfRange" xml:space="preserve">
+    <value>Number should be 0 or more</value>
+  </data>
+  <data name="TakeOutOfRange" xml:space="preserve">
+    <value>Take should be 1 or more</value>
+  </data>
+  <data name="UnknownStreamType" xml:space="preserve">
+    <value>Unknown stream type</value>
+  </data>
+  <data name="YearOutOfRange" xml:space="preserve">
+    <value>Year should be greater than 1900</value>
   </data>
 </root>

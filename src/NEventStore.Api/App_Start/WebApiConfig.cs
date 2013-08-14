@@ -8,36 +8,78 @@ using NEventStore.Api.Syndication.Atom;
 namespace NEventStore.Api {
 	public static class WebApiConfig {
 		public static void Register(HttpConfiguration config) {
-			//Handlers
+
+			config.ConfigureFilters();
+			config.ConfigureHandlers();
+			config.ConfigureEnrichers();
+			config.ConfigureFormatters();
+			config.ConfigureRoutes();
+
+			config.EnableSystemDiagnosticsTracing();
+		}
+
+		private static void ConfigureFilters(this HttpConfiguration config)
+		{
+			config.Filters.Add(new NEventStore.Api.Filters.ExceptionShieldingAttribute());
+		}
+
+		private static void ConfigureHandlers(this HttpConfiguration config)
+		{
 			config.MessageHandlers.Add(new EnrichingHandler());
-			
-			//Formatters
+		}
+
+		private static void ConfigureEnrichers(this HttpConfiguration config)
+		{
+			config.AddResponseEnrichers(new StreamResponseEnricher());
+		}
+
+		private static void ConfigureFormatters(this HttpConfiguration config)
+		{
 			config.Formatters.Remove(config.Formatters.XmlFormatter);
 			config.Formatters.Add(new NEventStore.Api.Syndication.Atom.AtomPub.AtomPubMediaFormatter());
+#if DEBUG
 			config.Formatters.JsonFormatter.SupportedMediaTypes.Clear();
+#endif
+		}
 
-			//Enricher
-			config.AddResponseEnrichers(new StreamResponseEnricher());
-
-			// Routes
+		private static void ConfigureRoutes(this HttpConfiguration config)
+		{
 			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}/{sequence}",
+				name: Routing.Routes.Default,
+				routeTemplate: "{controller}/{id}",
 				defaults: new
 				{
 					id = RouteParameter.Optional,
-					sequence = RouteParameter.Optional
 				}
 			);
 
-			// Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
-			// To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
-			// For more information, visit http://go.microsoft.com/fwlink/?LinkId=279712.
-			//config.EnableQuerySupport();
+			config.Routes.MapHttpRoute(
+				name: Routing.Routes.StreamsByDate,
+				routeTemplate: "{controller}/{year}/{month}/{day}",
+				defaults: new
+				{
+					controller = Routing.Controllers.Streams
+				}
+			);
 
-			// To disable tracing in your application, please comment out or remove the following line of code
-			// For more information, refer to: http://www.asp.net/web-api
-			config.EnableSystemDiagnosticsTracing();
+			config.Routes.MapHttpRoute(
+				name: Routing.Routes.Event,
+				routeTemplate: "{controller}/{id}/{number}",
+				defaults: new
+				{
+					controller = Routing.Controllers.Streams
+				}
+			);
+
+			config.Routes.MapHttpRoute(
+				name: Routing.Routes.Range,
+				routeTemplate: "{controller}/{id}/{action}/{from}/{take}",
+				defaults: new
+				{
+					controller = Routing.Controllers.Streams,
+				}
+			);
 		}
+
 	}
 }

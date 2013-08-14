@@ -55,49 +55,43 @@ namespace NEventStore.Api.Models
 
 		private void Enrich(EventStoreFeed feed, UrlHelper url)
 		{
-			var selfUrl = url.Link("DefaultApi", new { controller = "stream" });
+			DateTime previous = feed.Date.AddDays(-1);
+			DateTime next = feed.Date.AddDays(1);
+
+			var selfUrl = url.Link(Routing.Routes.StreamsByDate, new { controller = Routing.Controllers.Streams, year = feed.Date.Year, month = feed.Date.Month, day = feed.Date.Day });
+			var previousUrl = url.Link(Routing.Routes.StreamsByDate, new { controller = Routing.Controllers.Streams, year = previous.Year, month = previous.Month, day = previous.Day });
+			var nextUrl = url.Link(Routing.Routes.StreamsByDate, new { controller = Routing.Controllers.Streams, year = next.Year, month = next.Month, day = next.Day });
+			
 			feed.AddLink(new SelfLink(selfUrl));
+			feed.AddLink(new PreviousLink(previousUrl));
+			feed.AddLink(new NextLink(nextUrl));
 		}
 
 		private void Enrich(StreamFeed stream, UrlHelper url)
 		{
-			var selfUrl = url.Link("DefaultApi", new { controller = "stream", id = stream.Id });
+			var selfUrl = url.Link(Routing.Routes.Range, new { controller = Routing.Controllers.Streams, id = stream.Id, action = Routing.Actions.Range, from = stream.From, take = stream.Take });
+			var previousUrl = url.Link(Routing.Routes.Range, new { controller = Routing.Controllers.Streams, id = stream.Id, action = Routing.Actions.Range, from = stream.From - stream.Take, take = stream.Take });
+			var nextUrl = url.Link(Routing.Routes.Range, new { controller = Routing.Controllers.Streams, id = stream.Id, action = Routing.Actions.Range, from = stream.From + stream.Take, take = stream.Take });
+
 			stream.AddLink(new SelfLink(selfUrl));
-			stream.AddLink(new EditLink(selfUrl));
+			stream.AddLink(new PreviousLink(previousUrl));
+			stream.AddLink(new NextLink(nextUrl));
 		}
 
 		private void Enrich(Stream stream, UrlHelper url)
 		{
-			var selfUrl = url.Link("DefaultApi", new { controller = "stream", id = stream.Id });
-			//var previousUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = (evt.Id == 1) ? 1 : evt.Id - 1 });
-			//var nextUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = evt.Id == evt.EventCount ? evt.Id : evt.Id + 1 });
-			//var firstUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = 1 });
-			//var lastUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = evt.EventCount });
+			var selfUrl = url.Link(Routing.Routes.Range, new { controller = Routing.Controllers.Streams, id = stream.Id, action = Routing.Actions.Range, from = Routing.Head, take = Routing.PageSize });
 
 			stream.AddLink(new SelfLink(selfUrl));
-			stream.AddLink(new EditLink(selfUrl));
 			stream.AddLink(new AlternateLink(selfUrl));
-			//stream.AddLink(new PreviousLink(previousUrl));
-			//stream.AddLink(new NextLink(nextUrl));
-			//stream.AddLink(new FirstLink(firstUrl));
-			//stream.AddLink(new LastLink(lastUrl));
 		}
 
 		private void Enrich(Event evt, UrlHelper url)
 		{
-			var selfUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = evt.Id });
-			var previousUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = (evt.Id == 1) ? 1 : evt.Id - 1 });
-			var nextUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = evt.Id == evt.EventCount ? evt.Id : evt.Id + 1 });
-			var firstUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = 1 });
-			var lastUrl = url.Link("DefaultApi", new { controller = "stream", id = evt.StreamId, sequence = evt.EventCount });
-
+			var selfUrl = url.Link(Routing.Routes.Event, new { controller = Routing.Controllers.Streams, id = evt.StreamId, number = evt.Id });
+			
 			evt.AddLink(new SelfLink(selfUrl));
-			evt.AddLink(new EditLink(selfUrl));
 			evt.AddLink(new AlternateLink(selfUrl));
-			evt.AddLink(new PreviousLink(previousUrl));
-			evt.AddLink(new NextLink(nextUrl));
-			evt.AddLink(new FirstLink(firstUrl));
-			evt.AddLink(new LastLink(lastUrl));
 		}
 
 	}

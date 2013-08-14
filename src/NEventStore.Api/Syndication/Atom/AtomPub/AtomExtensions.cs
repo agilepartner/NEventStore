@@ -69,7 +69,7 @@ namespace NEventStore.Api.Syndication.Atom.AtomPub
         private static SyndicationContent GetSyndicationContent(object content, string contentType)
         {
             if (content == null || contentType.ToLowerInvariant() == PublicationContentTypes.Text)
-                return SyndicationContent.CreatePlaintextContent(content.ToString() ?? string.Empty);
+                return SyndicationContent.CreatePlaintextContent((string)content ?? string.Empty);
 
 			if (contentType.ToLowerInvariant() == PublicationContentTypes.Xml)
 				return SyndicationContent.CreateXmlContent(content);
