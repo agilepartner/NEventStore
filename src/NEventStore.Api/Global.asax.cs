@@ -40,35 +40,13 @@ namespace NEventStore.Api {
 		private Wireup StoreWireup()
 		{
 			return Wireup.Init()
-				.LogToOutputWindow()
+				//.LogToOutputWindow()
 				.UsingSqlPersistence("EventStore")
-				   .WithDialect(new MsSqlDialect())
-				.UsingJsonSerialization(() => LoadEventLibraryTypes())
-					.Compress()
-					.EncryptWith(Encryption.Key);
+					.WithDialect(new MsSqlDialect())
+					.UsingJsonSerialization()
+						.Compress()
+						.EncryptWith(Encryption.Key);
 		}
 
-		private IEnumerable<Type> LoadEventLibraryTypes()
-		{
-			//System.Diagnostics.Debugger.Break();
-
-			List<Type> types = new List<Type>();
-			//var pluginDir = HttpContext.Current.Server.MapPath("~/Events");
-			//foreach(var assemblyFile in Directory.GetFiles(pluginDir, "*.dll"))
-			//{
-			//	var assembly = Assembly.LoadFile(assemblyFile);
-			//	foreach(var type in assembly.GetTypes())
-			//	{
-			//		types.Add(type);
-			//		//if(!type.IsSubclassOf(typeof(IEnumerable)))
-			//		//{
-			//		//	var enumerableType = typeof(IEnumerable<>).MakeGenericType(type);
-			//		//	types.Add(enumerableType);
-			//		//}
-
-			//	}
-			//}
-			return types;
-		}
 	}
 }

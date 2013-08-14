@@ -252,10 +252,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NEventStore.Example.Events\NEventStore.Example.Events.csproj">
-      <Project>{7b505e5c-8bbd-440c-9d98-7a45cca2a949}</Project>
-      <Name>NEventStore.Example.Events</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NEventStore.Serialization.Json\NEventStore.Serialization.Json.csproj">
       <Project>{cfd895bd-7cb2-4811-a6fa-1851df769b67}</Project>
       <Name>NEventStore.Serialization.Json</Name>
@@ -302,7 +298,7 @@
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.8\tools\Microsoft.Bcl.Build.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(SolutionDir)NEventStore.Example.Events\$(OutDir)$(ConfigurationName)\NEventStore.Example.Events.dll" "$(ProjectDir)Events"</PostBuildEvent>
+    <PostBuildEvent>rem xcopy /y "$(SolutionDir)NEventStore.Example.Events\$(OutDir)$(ConfigurationName)\NEventStore.Example.Events.dll" "$(ProjectDir)Events"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

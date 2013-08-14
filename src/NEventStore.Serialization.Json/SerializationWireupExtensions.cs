@@ -9,24 +9,14 @@ namespace NEventStore
 
     public static class WireupExtensions
     {
-		public static SerializationWireup UsingJsonSerialization(this PersistenceWireup wireup) 
-		{
-			return UsingJsonSerialization(wireup, null);
-		}
-
-        public static SerializationWireup UsingJsonSerialization(this PersistenceWireup wireup, Func<IEnumerable<Type>> knownTypesFactory)
+		public static SerializationWireup UsingJsonSerialization(this PersistenceWireup wireup, params Type[] knownTypes)
         {
-			return wireup.UsingCustomSerialization(new JsonSerializer(knownTypesFactory != null ? knownTypesFactory().ToArray() : null));
+			return wireup.UsingCustomSerialization(new JsonSerializer(knownTypes));
         }
 
-		public static SerializationWireup UsingBsonSerialization(this PersistenceWireup wireup)
-		{
-			return UsingBsonSerialization(wireup, null);
-		}
-
-		public static SerializationWireup UsingBsonSerialization(this PersistenceWireup wireup, Func<IEnumerable<Type>> knownTypesFactory)
+		public static SerializationWireup UsingBsonSerialization(this PersistenceWireup wireup, params Type[] knownTypes)
         {
-			return wireup.UsingCustomSerialization(new BsonSerializer(knownTypesFactory != null ? knownTypesFactory().ToArray() : null));
+			return wireup.UsingCustomSerialization(new BsonSerializer(knownTypes));
         }
     }
 }
