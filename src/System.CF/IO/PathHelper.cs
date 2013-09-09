@@ -8,7 +8,22 @@ namespace System.IO
 {
     public class PathHelper
     {
-        public static string GetFullPath(string fileName) 
+        public static string GetFullPath(params string[] fileNameParts)
+        {
+            Assumes.NotNullOrEmpty(fileNameParts);
+
+            if (fileNameParts.Length == 1)
+                return GetFullPathFromFileName(fileNameParts[0]);
+
+            var fileName = String.Empty;
+            foreach (var fileNamePart in fileNameParts)
+            {
+                fileName = Path.Combine(fileName, fileNamePart);
+            }
+            return GetFullPathFromFileName(fileName);
+        }
+
+        private static string GetFullPathFromFileName(string fileName)
         {
             if (Path.IsPathRooted(fileName))
                 return fileName;
